@@ -6,6 +6,7 @@ longform:
   sceneFolder: /
   scenes:
     - Introduction
+    - test1
   sceneTemplate: TEMPLATES/chapter.md
   ignoredFiles: []
 ---
