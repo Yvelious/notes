@@ -1,7 +1,6 @@
 ---
-title: 'test1'
-draft: false
+title: test1
+draft: true
 tags:
-  -
 ---
 test1 
