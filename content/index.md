@@ -1,6 +1,5 @@
 ---
-title: Welcome to Quartz
+title: Добро пожаловать в мои DEV-заметки
 ---
 
-This is a blank Quartz installation.
-See the [documentation](https://quartz.jzhao.xyz) for how to get started.
+Здесь я буду писать свои мысли, знания и опыт касательно разработки.

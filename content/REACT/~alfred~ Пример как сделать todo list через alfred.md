@@ -1,0 +1,1 @@
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~alfred~ Пример как сделать todo list через alfred.md

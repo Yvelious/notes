@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "🪴 Quartz 4.0",
+    pageTitle: "Levy's Notes",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
@@ -33,7 +33,7 @@ const config: QuartzConfig = {
           gray: "#b8b8b8",
           darkgray: "#4e4e4e",
           dark: "#2b2b2b",
-          secondary: "#284b63",
+          secondary: "#e14400",
           tertiary: "#84a59d",
           highlight: "rgba(143, 159, 169, 0.15)",
         },
