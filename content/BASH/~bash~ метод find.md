@@ -1,7 +1,3 @@
----
-symlink: 
-symlinkchapter: BASH
----
  
 #bash #find #done
 
