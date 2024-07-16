@@ -6,7 +6,7 @@ tags:
 symlink: 
 symlinkchapter: SSH
 ---
-[[FILES/345693b8d96773d3303704bd0aa73b1a_MD5.jpeg|Open: Pasted image 20240716230042.png]]
+
 ![[FILES/345693b8d96773d3303704bd0aa73b1a_MD5.jpeg]]
 
 
