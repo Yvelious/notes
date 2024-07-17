@@ -51,10 +51,11 @@ chmod 600 ~/.ssh/config
 
 Например, раньше, чтобы подключиться через SSH к дев-репозиторию, нужно было использовать подобную команду `ssh user1@github:22`. Но после настройки конфигурационного файла  команда для подключения через SSH к определенном серверу можно упростить к примеру до такой`ssh dev`.
 
-## Flash-cards
+## ***Flash-cards***
 -----
 
-## Links
+
+## ***Links***
 ----------
 
 ## References
@@ -62,5 +63,6 @@ chmod 600 ~/.ssh/config
 1. https://phoenixnap.com/kb/ssh-config
 2. https://linuxize.com/post/using-the-ssh-config-file/
 
-## Zero-links
+## ***Zero-links***
 ----
+***[[00 GIT]]***
