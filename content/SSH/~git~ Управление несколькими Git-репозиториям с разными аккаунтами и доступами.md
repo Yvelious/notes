@@ -7,7 +7,8 @@ symlink:
 symlinkchapter: SSH
 ---
 
-![[FILES/345693b8d96773d3303704bd0aa73b1a_MD5.jpeg]]
+
+![[Pasted image 20240717125544.png]]
 
 
 ## Notes
@@ -58,6 +59,7 @@ chmod 600 ~/.ssh/config
 ## References
 ------------
 https://phoenixnap.com/kb/ssh-config
+https://linuxize.com/post/using-the-ssh-config-file/
 
 ## Zero-links
 ----
