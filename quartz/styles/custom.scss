@@ -10,5 +10,5 @@ em > strong {
 }
 
 .parent:has(em > strong) {
-	display: none;
+	display: none !important;
 }
