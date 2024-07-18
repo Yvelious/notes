@@ -60,7 +60,7 @@ chmod 600 ~/.ssh/config
 ## ***Links***
 ----------
 
-## References1
+## References
 ------------
 1. https://phoenixnap.com/kb/ssh-config
 2. https://linuxize.com/post/using-the-ssh-config-file/
