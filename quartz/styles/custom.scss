@@ -1,3 +1,14 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+sub {
+	display: none !important;
+}
+
+em > strong {
+	display: none;
+}
+
+.parent:has(em > strong) {
+	display: none !important;
+}
