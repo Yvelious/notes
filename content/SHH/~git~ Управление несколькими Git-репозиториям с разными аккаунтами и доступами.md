@@ -65,8 +65,8 @@ chmod 600 ~/.ssh/config
 1. https://phoenixnap.com/kb/ssh-config
 2. https://linuxize.com/post/using-the-ssh-config-file/
 
-## Zero-links
+## ***Zero-links***
 ----
-[[00 GIT]]
+***[[00 GIT]]***
 
  
