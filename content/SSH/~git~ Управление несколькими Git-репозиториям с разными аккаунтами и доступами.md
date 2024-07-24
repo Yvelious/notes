@@ -4,7 +4,7 @@ tags:
   - ssh
   - config
 symlink: 
-symlinkchapter: SHH
+symlinkchapter: SSH
 ---
 
 
@@ -53,20 +53,25 @@ chmod 600 ~/.ssh/config
 
 
 
-## ***Flash-cards***
------
+> [!hidden-in-public]
+> ## Flash-cards
+> -----
 
 
-## ***Links***
-----------
+> [!hidden-in-public]
+> ## Links
+> ----------
+> 
 
 ## References
 ------------
 1. https://phoenixnap.com/kb/ssh-config
 2. https://linuxize.com/post/using-the-ssh-config-file/
 
-## ***Zero-links***
-----
-***[[00 GIT]]***
+> [!hidden-in-public]
+> ## Zero-links
+> ----
+> [[00 GIT]]
+> 
 
  

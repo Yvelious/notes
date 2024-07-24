@@ -2,10 +2,6 @@
 
 // put your custom CSS here!
 
-em > strong {
-	display: none;
-}
-
-hr {
+.callout[data-callout="hidden-in-public"] {
 	display: none;
 }
