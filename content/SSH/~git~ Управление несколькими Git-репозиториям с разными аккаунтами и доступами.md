@@ -3,7 +3,6 @@ tags:
   - git
   - ssh
   - config
-  - test
 symlink: 
 symlinkchapter: SSH
 ---
@@ -54,25 +53,10 @@ chmod 600 ~/.ssh/config
 
 
 
-> [!hidden-in-public]
-> ## Flash-cards
-> -----
-
-
-> [!hidden-in-public]
-> ## Links
-> ----------
-> 
 
 ## References
 ------------
 1. https://phoenixnap.com/kb/ssh-config
 2. https://linuxize.com/post/using-the-ssh-config-file/
-
-> [!hidden-in-public]
-> ## Zero-links
-> ----
-> [[00 GIT]]
-> 
 
  
