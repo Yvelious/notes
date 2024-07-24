@@ -3,6 +3,7 @@ tags:
   - git
   - ssh
   - config
+  - test
 symlink: 
 symlinkchapter: SSH
 ---
