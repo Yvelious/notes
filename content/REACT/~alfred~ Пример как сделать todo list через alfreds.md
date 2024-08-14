@@ -1,6 +1,7 @@
 ---
 symlink: 
 symlinkchapter: REACT
+idnote: 3
 ---
 #bash
 
