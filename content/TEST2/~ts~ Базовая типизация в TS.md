@@ -3,7 +3,7 @@ tags:
   - ts
 order: 7
 section: Basic
-symlink: 
+symlink:
 symlinkchapter: TEST2
 idnote: 0909
 ---
