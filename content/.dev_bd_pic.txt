@@ -1,3 +1,9 @@
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/~github~ Привязать аккаунт Github к компьютеру.md
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/~aws~ aws s3 cli.md
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~aws~ AWS-cli.md
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~obsidian~ Кастомный скрипт по удалению симлинков из другого блога.md
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~alfred~ Пример как сделать todo list через alfreds.md
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~ts~ Базовая типизация в TS.md
 Pasted image 20230627000329.png
 Pasted image 20230627000725.png
 Pasted image 20230627001549.png
@@ -7,5 +13,7 @@ Pasted image 20230627213109.png
 Pasted image 20230627213405.png
 Pasted image 20230627220345.png
 Pasted image 20230627221030.png
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~obsidian~ Кастомный скрипт для добавления симлинков в публичном блокноте.md
 test12323.jpg
+/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/~ssh~ Управление несколькими SSH доступами.md
 Pasted image 20240717125544.png
