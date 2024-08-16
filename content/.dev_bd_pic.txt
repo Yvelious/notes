@@ -1,4 +1,3 @@
-/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/~github~ Привязать аккаунт Github к компьютеру.md
 /Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/~aws~ aws s3 cli.md
 /Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~aws~ AWS-cli.md
 /Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~obsidian~ Кастомный скрипт по удалению симлинков из другого блога.md
