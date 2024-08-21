@@ -10,3 +10,6 @@ private/
 .replit
 replit.nix
 .dev_bd.txt
+.deutsch_bd.txt
+.english_bd.txt
+.general_bd.txt
