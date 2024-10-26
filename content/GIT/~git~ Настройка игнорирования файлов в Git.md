@@ -7,6 +7,7 @@ tags:
 idnote: 1234
 symlink: 
 symlinkchapter: GIT
+page-title: Настройка игнорирования файлов в Git
 ---
 ![[git-ignore-diagram.webp]]
 ##  Многоуровневая система игнорирования файлов в Git
