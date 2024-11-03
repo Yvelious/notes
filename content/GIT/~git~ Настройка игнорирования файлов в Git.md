@@ -9,6 +9,12 @@ symlink:
 symlinkchapter: GIT
 title: Настройка игнорирования файлов в Git
 ---
+
+```dataviewjs
+const pg = dv.current();
+console.log(pg)
+```
+
 ![[git-ignore-diagram.webp]]
 ##  Многоуровневая система игнорирования файлов в Git
 
