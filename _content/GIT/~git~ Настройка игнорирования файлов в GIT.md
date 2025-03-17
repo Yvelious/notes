@@ -1,1 +1,0 @@
-/Volumes/SSD/SECOND_BRAIN/obsidian_frontend_vault/frontend_vault/BACKLOG/~git~ Настройка игнорирования файлов в GIT.md
