@@ -1,11 +1,10 @@
 import { GlobalConfiguration } from "../cfg"
 import { ValidLocale } from "../i18n"
 import { QuartzPluginData } from "../plugins/vfile"
-import { QuartzComponentProps } from "./types"
 
 interface Props {
+  date: Date
   locale?: ValidLocale
-  fileData: QuartzComponentProps["fileData"]
 }
 
 export type ValidDateType = keyof Required<QuartzPluginData>["dates"]
@@ -27,8 +26,6 @@ export function formatDate(d: Date, locale: ValidLocale = "en-US"): string {
   })
 }
 
-export function Date({ fileData, locale }: Props) {
-  const dateString = fileData.frontmatter?.published
-  const date = dateString ? new Date(dateString) : undefined
-  return date ? <time datetime={date.toISOString()}>{formatDate(date, locale)}</time> : null
+export function Date({ date, locale }: Props) {
+  return <time datetime={date.toISOString()}>{formatDate(date, locale)}</time>
 }
