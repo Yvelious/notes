@@ -2,6 +2,7 @@
 
 // put your custom CSS here!
 
-.callout[data-callout="hidden-in-public"] {
+.callout[data-callout="hidden-in-public"],
+.callout[data-callout="raw-hidden"] {
 	display: none;
 }

@@ -13,9 +13,7 @@ rating:
 symlink: 
 symlinkchapter: GIT
 ---
-![[Pasted image 20221104172417.png| 100%]]
-#  Git: Разница между `git add .` и `git add -A` 
-
+![[Pasted image 20221104172417.png]]
 
 ## `git add .`
 
