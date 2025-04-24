@@ -62,5 +62,11 @@ find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
     ./link (это больше не ссылка, а копия file.txt)
     ```
 
+> [!hidden-in-public]
+> 
+> [[00 Bash]]
+> 
+> 
+
 
 
