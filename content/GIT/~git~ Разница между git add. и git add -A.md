@@ -14,7 +14,7 @@ symlink:
 symlinkchapter: GIT
 ---
 ![[Pasted image 20221104172417.png]]
-#  Git: Разница между`git add .` и `git add -A` 
+#  Git: Разница между `git add .` и `git add -A` 
 
 
 ## `git add .`
