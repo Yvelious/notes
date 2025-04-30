@@ -12,6 +12,7 @@
 	margin-bottom: 10px;
 }
 
-figure[data-rehype-pretty-code-figure] {
+figure[data-rehype-pretty-code-figure],
+pre {
 	background: #fff;
 }
