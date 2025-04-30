@@ -16,3 +16,10 @@ figure[data-rehype-pretty-code-figure],
 pre {
 	background: #fff;
 }
+
+.toc-content .depth-0,
+.toc-content .depth-1 {
+	line-height: 1.2;
+	margint-top: 5px;
+	margin-bottom: 5px;
+}
