@@ -102,7 +102,8 @@ handleMinLg(breakpointMinLg); // запускаем при первой загр
 breakpointMinLg.addEventListener('change', handleMinLg); 
   
 function handleMinLg (e) { 
-    if (e.matches) {  	// если возвращается true, значит ширина экрана соответствует заданному медиа-запросу
+	// если возвращается true, значит ширина экрана соответствует заданному медиа-запросу
+    if (e.matches) {  	
 		console.log('Ширина экрана больше или равна 992px');
     }  
 }
