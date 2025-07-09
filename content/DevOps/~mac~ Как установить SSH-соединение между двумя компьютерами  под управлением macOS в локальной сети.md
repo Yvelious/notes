@@ -7,7 +7,7 @@ path:
 tags:
   - macos
   - ssh
-status: 
+status: reading
 rating: 
 symlink: 
 symlinkchapter: DevOps
