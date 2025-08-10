@@ -77,6 +77,18 @@ plugins: [ isTest && new SomeTestPlugin()]
 
 В этом случае переменная `isTest` доступна в любом месте конфигурации, так как `process.env.NODE_ENV` глобальна.
 
+N.B.
+Если мы используем `--node-env` , но все же хотим что бы сработала при сборке автоматическая оптимизация для продакшена как если бы мы использовали флаг `--mode` cо значением `production`, то нам нужно явно прописать в конфигурации ключ `mode` и установить его значение в `production`:
+
+```js
+const isProd = process.env.NODE_ENV === 'production';  
+module.exports = {  
+    mode: isProd ? "production" : "development",
+    ...
+}
+```
+
+
 ---
 
 ### Сравнительная таблица
