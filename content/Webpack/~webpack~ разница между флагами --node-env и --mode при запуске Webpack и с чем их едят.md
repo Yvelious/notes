@@ -2,7 +2,7 @@
 create: 2025-08-10
 idnote: lGhIky7VNh
 vault: dev
-title: Разбираемся с флагами `--mode` и `--node-env` в Webpack
+title: Разбираемся с флагами --mode и --node-env при запуске Webpack
 path: 
 tags:
   - webpack
@@ -52,9 +52,7 @@ module.exports = (env, argv) => {
 	const isProduction = argv.mode === 'production';    
 	return {     
 		entry: './src/index.js',     
-		plugins: [       // Этот плагин будет использоваться только в продакшене       
-			isProduction && new CleanWebpackPlugin()
-		]   
+		plugins: [ isProduction && new CleanWebpackPlugin()]   
 	}; 
 };
 ```
@@ -73,9 +71,7 @@ module.exports = (env, argv) => {
 
 const isTest = process.env.NODE_ENV === 'test';  
 module.exports = {   
-plugins: [     // Плагин будет добавлен только в режиме test     
-	isTest && new SomeTestPlugin()   
-] 
+plugins: [ isTest && new SomeTestPlugin()] 
 };
 ```
 
@@ -99,9 +95,7 @@ plugins: [     // Плагин будет добавлен только в ре�
 ### Резюмирую
 
 - Используйте **`--mode`**, если вам нужно быстро переключаться между разработкой и продакшеном с автоматическими оптимизациями.
-    
 - Используйте **`--node-env`**, если вы хотите задать кастомное значение среды (например, `test` или `staging`) и настроить поведение сборки вручную.
-    
 
 
 
