@@ -2,7 +2,7 @@
 create: 2025-08-27
 idnote: OUH4rf47Af
 vault: dev
-title: 
+title: Stacking context in CSS
 path: 
 tags:
   - compositing_layers
