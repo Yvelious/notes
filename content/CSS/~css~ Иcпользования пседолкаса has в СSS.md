@@ -2,7 +2,7 @@
 create: 2025-09-23
 idnote: Dv6OPXUoDu
 vault: dev
-title:
+title: Иcпользования пседолкаса has в СSS
 path:
 tags:
   - css
@@ -11,6 +11,7 @@ rating:
 published: 2025-09-23
 symlink:
 symlinkchapter: CSS
+"": x
 ---
 
 ![[Pasted image 20250923224005.png]]
