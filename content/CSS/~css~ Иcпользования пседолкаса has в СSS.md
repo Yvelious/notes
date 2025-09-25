@@ -11,7 +11,6 @@ rating:
 published: 2025-09-23
 symlink:
 symlinkchapter: CSS
-"": x
 ---
 
 ![[Pasted image 20250923224005.png]]
