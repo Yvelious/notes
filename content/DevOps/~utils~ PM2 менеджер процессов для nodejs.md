@@ -2,7 +2,7 @@
 create: 2025-08-11
 idnote: gOWzVdzN3u
 vault: dev
-title:
+title: PM2 менеджер процессов для NodeJs
 path:
 tags:
   - pm2
