@@ -27,7 +27,7 @@ jobs:
       - name: Get changed RU markdown files
         id: changes
         run: |
-          git fetch origin main --depth=1
+          git fetch origin v4 --depth=1
           CHANGED_FILES=$(git diff --name-only HEAD^ HEAD | grep '^content/ru/.*\.md$' || true)
           echo "changed files:"
           echo "$CHANGED_FILES"
