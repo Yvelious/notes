@@ -1,4 +1,4 @@
-name: Auto Translate to EN & DE
+name: Auto Translate RU → EN/DE
 
 on:
   push:
@@ -11,34 +11,47 @@ permissions:
 jobs:
   translate:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Translate RU → EN
-        uses: SMikitky/chatgpt-md-translator@v1
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          source: "content/ru"
-          target: "content/en"
-          to: "en"
-          overwrite: "true"
+          node-version: 20
+
+      - name: Install translator
+        run: npm install -g chatgpt-md-translator
+
+      - name: Translate RU → EN
+        run: |
+          chatgpt-md-translator \
+            --from ru \
+            --to en \
+            --source content/ru \
+            --target content/en \
+            --overwrite \
+            --model gpt-4o-mini
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Translate RU → DE
-        uses: SMikitky/chatgpt-md-translator@v1
-        with:
-          source: "content/ru"
-          target: "content/de"
-          to: "de"
-          overwrite: "true"
+        run: |
+          chatgpt-md-translator \
+            --from ru \
+            --to de \
+            --source content/ru \
+            --target content/de \
+            --overwrite \
+            --model gpt-4o-mini
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      - name: Commit changes
+      - name: Commit translated files
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "Auto-translate new RU content to EN & DE" || echo "No changes"
+          git commit -m "Auto translations (RU→EN/DE)" || echo "No changes"
           git push
