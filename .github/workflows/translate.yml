@@ -10,14 +10,14 @@ permissions:
 
 jobs:
   translate:
-    if: "!contains(github.event.head_commit.message, 'Auto translations')" # 🔒 защита от циклов
+    if: "!contains(github.event.head_commit.message, 'Auto translations')" # 🛑 защита от циклов
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 10 # берём больше коммитов для git diff
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -27,46 +27,11 @@ jobs:
       - name: Install chatgpt-md-translator
         run: npm install -g chatgpt-md-translator
 
-      - name: Get changed RU markdown files
+      - name: Detect changed RU markdown files
         id: changes
         run: |
-          echo "Commit before: ${{ github.event.before }}"
-          echo "Commit after: ${{ github.sha }}"
-          git fetch origin ${{ github.ref_name }} --depth=2 || true
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/ru/.*\.md$' || true)
-          echo "Changed RU files:"
-          echo "$CHANGED_FILES"
-          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "🧭 Current branch: ${{ github.ref_name }}"
+          echo "⬅️ Before commit: ${{ github.event.before }}"
+          echo "➡️ After commit:  ${{ github.sha }}"
 
-      - name: Debug changed files
-        run: echo "${{ steps.changes.outputs.files }}"
-
-      - name: Translate changed files RU → EN
-        if: steps.changes.outputs.files != ''
-        run: |
-          for file in ${{ steps.changes.outputs.files }}; do
-            target=${file/content\/ru/content\/en}
-            mkdir -p "$(dirname "$target")"
-            chatgpt-md-translator "$file" "$target" --to en --overwrite --model gpt-4o-mini
-          done
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
-      - name: Translate changed files RU → DE
-        if: steps.changes.outputs.files != ''
-        run: |
-          for file in ${{ steps.changes.outputs.files }}; do
-            target=${file/content\/ru/content\/de}
-            mkdir -p "$(dirname "$target")"
-            chatgpt-md-translator "$file" "$target" --to de --overwrite --model gpt-4o-mini
-          done
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
-      - name: Commit translated files
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add content/en content/de || true
-          git commit -m "Auto translations (only changed files)" || echo "No new translations"
-          git push
+          git fetch origin ${{ github.ref_name }} --depth=10 || true
