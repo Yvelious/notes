@@ -1,4 +1,4 @@
-name: Auto Translate RU → EN/DE
+name: Auto Translate RU → EN/DE (only changed)
 
 on:
   push:
@@ -21,30 +21,37 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install translator
+      - name: Install chatgpt-md-translator
         run: npm install -g chatgpt-md-translator
 
-      - name: Translate RU → EN
+      - name: Get changed RU markdown files
+        id: changes
         run: |
-          chatgpt-md-translator \
-            --from ru \
-            --to en \
-            --source content/ru \
-            --target content/en \
-            --overwrite \
-            --model gpt-4o-mini
+          git fetch origin main --depth=1
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD | grep '^content/ru/.*\.md$' || true)
+          echo "changed files:"
+          echo "$CHANGED_FILES"
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
+      - name: Translate changed files RU → EN
+        if: steps.changes.outputs.files != ''
+        run: |
+          for file in ${{ steps.changes.outputs.files }}; do
+            target=${file/content\/ru/content\/en}
+            mkdir -p "$(dirname "$target")"
+            chatgpt-md-translator "$file" "$target" --to en --overwrite --model gpt-4o-mini
+          done
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      - name: Translate RU → DE
+      - name: Translate changed files RU → DE
+        if: steps.changes.outputs.files != ''
         run: |
-          chatgpt-md-translator \
-            --from ru \
-            --to de \
-            --source content/ru \
-            --target content/de \
-            --overwrite \
-            --model gpt-4o-mini
+          for file in ${{ steps.changes.outputs.files }}; do
+            target=${file/content\/ru/content\/de}
+            mkdir -p "$(dirname "$target")"
+            chatgpt-md-translator "$file" "$target" --to de --overwrite --model gpt-4o-mini
+          done
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
@@ -52,6 +59,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Auto translations (RU→EN/DE)" || echo "No changes"
+          git add content/en content/de || true
+          git commit -m "Auto translations (only changed files)" || echo "No new translations"
           git push
