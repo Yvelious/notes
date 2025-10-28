@@ -1,4 +1,4 @@
-name: Auto Translate RU → EN/DE (only changed)
+name: Auto Translate RU → EN/DE (smart)
 
 on:
   push:
@@ -10,11 +10,14 @@ permissions:
 
 jobs:
   translate:
+    if: "!contains(github.event.head_commit.message, 'Auto translations')" # 🔒 защита от циклов
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -27,16 +30,16 @@ jobs:
       - name: Get changed RU markdown files
         id: changes
         run: |
-          git fetch origin v4 --depth=1
-          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD | grep '^content/ru/.*\.md$' || true)
-          echo "changed files:"
+          echo "Commit before: ${{ github.event.before }}"
+          echo "Commit after: ${{ github.sha }}"
+          git fetch origin ${{ github.ref_name }} --depth=2 || true
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/ru/.*\.md$' || true)
+          echo "Changed RU files:"
           echo "$CHANGED_FILES"
           echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
       - name: Debug changed files
-        run: |
-          echo "Changed files detected:"
-          echo "${{ steps.changes.outputs.files }}"
+        run: echo "${{ steps.changes.outputs.files }}"
 
       - name: Translate changed files RU → EN
         if: steps.changes.outputs.files != ''
