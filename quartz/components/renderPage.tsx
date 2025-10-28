@@ -10,6 +10,7 @@ import { Root, Element, ElementContent } from "hast"
 import { GlobalConfiguration } from "../cfg"
 import { i18n } from "../i18n"
 
+
 interface RenderComponents {
   head: QuartzComponent
   header: QuartzComponent[]
