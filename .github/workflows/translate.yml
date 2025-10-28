@@ -33,6 +33,11 @@ jobs:
           echo "$CHANGED_FILES"
           echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
+      - name: Debug changed files
+        run: |
+          echo "Changed files detected:"
+          echo "${{ steps.changes.outputs.files }}"
+
       - name: Translate changed files RU → EN
         if: steps.changes.outputs.files != ''
         run: |
