@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # === Подготовка окружения ===
       - name: 🧾 Checkout repository
         uses: actions/checkout@v4
         with:
@@ -27,27 +28,45 @@ jobs:
       - name: 📦 Install chatgpt-md-translator
         run: npm install -g chatgpt-md-translator
 
+      # === Поиск изменённых файлов ===
       - name: 🔍 Detect changed RU markdown files
         id: changes
         run: |
+          echo "🧭 Branch: ${{ github.ref_name }}"
           git fetch origin ${{ github.ref_name }} --depth=20 || true
+
           CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: "${{ github.sha }}" | grep '^content/ru/.*\.md$' || true)
           if [ -z "$CHANGED_FILES" ]; then
+            echo "⚠️ Нет изменений — берём все RU-файлы"
             CHANGED_FILES=$(find content/ru -type f -name "*.md" || true)
           fi
+
+          echo "📄 Найденные RU-файлы:"
+          echo "$CHANGED_FILES"
+
           {
             echo "files<<EOF"
             echo "$CHANGED_FILES"
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
+      - name: 🧩 Debug changed files
+        run: |
+          if [ -z "${{ steps.changes.outputs.files }}" ]; then
+            echo "⚠️ Нет изменённых .md файлов в content/ru/"
+          else
+            echo "✅ Найдены файлы для перевода:"
+            echo "${{ steps.changes.outputs.files }}"
+          fi
+
       # === Перевод RU → EN ===
       - name: 🌐 Translate RU → EN
         if: steps.changes.outputs.files != ''
         run: |
           echo "🌍 Переводим на английский..."
-          # Создаём конфиг прямо в корне репозитория
-          cat > .chatgpt-md-translator.json <<'EOF'
+          # Конфигурация переводчика (CLI ищет в ~/.config/chatgpt-md-translator/config.json)
+          mkdir -p ~/.config/chatgpt-md-translator
+          cat > ~/.config/chatgpt-md-translator/config.json <<'EOF'
           {
             "openaiApiKey": "${{ secrets.OPENAI_API_KEY }}",
             "defaultLanguage": "en",
@@ -69,8 +88,9 @@ jobs:
         if: steps.changes.outputs.files != ''
         run: |
           echo "🇩🇪 Переводим на немецкий..."
-          # Создаём конфиг прямо в корне репозитория
-          cat > .chatgpt-md-translator.json <<'EOF'
+          # Конфигурация переводчика
+          mkdir -p ~/.config/chatgpt-md-translator
+          cat > ~/.config/chatgpt-md-translator/config.json <<'EOF'
           {
             "openaiApiKey": "${{ secrets.OPENAI_API_KEY }}",
             "defaultLanguage": "de",
