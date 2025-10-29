@@ -71,7 +71,7 @@ jobs:
             target="${file/content\/ru/content\/en}"
             mkdir -p "$(dirname "$target")"
             echo "Translating: '$file' → '$target'"
-            chatgpt-md-translator "$file" "$target" --to en --overwrite --model gpt-4o-mini
+            chatgpt-md-translator "$file" "$target" --lang en --overwrite --model gpt-4o-mini
           done
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -85,10 +85,6 @@ jobs:
             target="${file/content\/ru/content\/de}"
             mkdir -p "$(dirname "$target")"
             echo "Translating: '$file' → '$target'"
-            chatgpt-md-translator "$file" "$target" --to de --overwrite --model gpt-4o-mini
-          done
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Show translated results
         run: |
