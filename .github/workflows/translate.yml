@@ -1,4 +1,4 @@
-name: Auto Translate RU → EN/DE (smart + debug)
+name: Auto Translate RU → EN/DE (stable)
 
 on:
   push:
@@ -10,41 +10,41 @@ permissions:
 
 jobs:
   translate:
-    if: "!contains(github.event.head_commit.message, 'Auto translations')" # 🛑 защита от циклов
+    if: "!contains(github.event.head_commit.message, 'Auto translations')" # защита от зацикливания
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # === Подготовка окружения ===
+      - name: 🧾 Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 20
 
-      - name: Set up Node
+      - name: ⚙️ Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install chatgpt-md-translator
+      - name: 📦 Install chatgpt-md-translator
         run: npm install -g chatgpt-md-translator
 
-      - name: Detect changed RU markdown files
+      # === Поиск изменённых файлов ===
+      - name: 🔍 Detect changed RU markdown files
         id: changes
         run: |
           echo "🧭 Branch: ${{ github.ref_name }}"
-          echo "⬅️ Before: ${{ github.event.before }}"
-          echo "➡️ After:  ${{ github.sha }}"
-
           git fetch origin ${{ github.ref_name }} --depth=20 || true
 
-          # Получаем список файлов из последнего коммита (работает даже при shallow clone)
+          # Находим все изменённые .md в последнем коммите
           CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: "${{ github.sha }}" | grep '^content/ru/.*\.md$' || true)
 
+          # Если ничего не найдено (например, первый запуск), берём все RU-файлы
           if [ -z "$CHANGED_FILES" ]; then
-            echo "⚠️ Ничего не найдено через git log, проверяем все RU-файлы"
+            echo "⚠️ Нет изменений — берём все RU-файлы"
             CHANGED_FILES=$(find content/ru -type f -name "*.md" || true)
           fi
 
-          echo "📄 Найденные изменённые RU-файлы:"
+          echo "📄 Найденные RU-файлы:"
           echo "$CHANGED_FILES"
 
           {
@@ -53,50 +53,29 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
-      - name: Debug changed files
+      - name: 🧩 Debug changed files
         run: |
           if [ -z "${{ steps.changes.outputs.files }}" ]; then
             echo "⚠️ Нет изменённых .md файлов в content/ru/"
           else
-            echo "✅ Изменённые файлы:"
+            echo "✅ Найдены файлы для перевода:"
             echo "${{ steps.changes.outputs.files }}"
           fi
 
-      - name: Translate RU → EN
+      # === Перевод RU → EN ===
+      - name: 🌐 Translate RU → EN
         if: steps.changes.outputs.files != ''
         run: |
-          echo "🌐 Переводим на английский..."
+          echo "🌍 Переводим на английский..."
+          # Конфиг переводчика
+          cat > ~/.chatgpt-md-translator.json <<'EOF'
+          {
+            "defaultLanguage": "en",
+            "defaultModel": "gpt-4o-mini",
+            "overwrite": true
+          }
+          EOF
+
           echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
             [ -z "$file" ] && continue
-            target="${file/content\/ru/content\/en}"
-            mkdir -p "$(dirname "$target")"
-            echo "Translating: '$file' → '$target'"
-            chatgpt-md-translator "$file" "$target" --lang en --overwrite --model gpt-4o-mini
-          done
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
-      - name: Translate RU → DE
-        if: steps.changes.outputs.files != ''
-        run: |
-          echo "🇩🇪 Переводим на немецкий..."
-          echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
-            [ -z "$file" ] && continue
-            target="${file/content\/ru/content\/de}"
-            mkdir -p "$(dirname "$target")"
-            echo "Translating: '$file' → '$target'"
-
-      - name: Show translated results
-        run: |
-          echo "📂 Содержимое папок после перевода:"
-          ls -R content/en || true
-          ls -R content/de || true
-
-      - name: Commit translated files
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add content/en content/de || true
-          git status
-          git commit -m "Auto translations (only changed files)" || echo "No new translations to commit"
-          git push || echo "Push skipped"
+            # строим путь к целевому файлу
