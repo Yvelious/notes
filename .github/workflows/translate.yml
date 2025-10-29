@@ -66,10 +66,11 @@ jobs:
         if: steps.changes.outputs.files != ''
         run: |
           echo "🌐 Переводим на английский..."
-          for file in ${{ steps.changes.outputs.files }}; do
-            target=${file/content\/ru/content\/en}
+          echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            target="${file/content\/ru/content\/en}"
             mkdir -p "$(dirname "$target")"
-            echo "Translating: $file → $target"
+            echo "Translating: '$file' → '$target'"
             chatgpt-md-translator "$file" "$target" --to en --overwrite --model gpt-4o-mini
           done
         env:
@@ -79,10 +80,11 @@ jobs:
         if: steps.changes.outputs.files != ''
         run: |
           echo "🇩🇪 Переводим на немецкий..."
-          for file in ${{ steps.changes.outputs.files }}; do
-            target=${file/content\/ru/content\/de}
+          echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            target="${file/content\/ru/content\/de}"
             mkdir -p "$(dirname "$target")"
-            echo "Translating: $file → $target"
+            echo "Translating: '$file' → '$target'"
             chatgpt-md-translator "$file" "$target" --to de --overwrite --model gpt-4o-mini
           done
         env:
