@@ -36,13 +36,17 @@ jobs:
 
           git fetch origin ${{ github.ref_name }} --depth=20 || true
 
-          # Проверяем только последний коммит (работает даже при shallow clone)
-          CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: ${{ github.sha }} | grep '^content/ru/.*\.md$' || true)
+          # Получаем список файлов из последнего коммита (всегда работает)
+          CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: "${{ github.sha }}" | grep '^content/ru/.*\.md$' || true)
 
-          # Если нет найденных — проверяем все RU-файлы
           if [ -z "$CHANGED_FILES" ]; then
-            echo "⚠️ Ничего не найдено через git log, берём все файлы content/ru/*.md"
-            CHANGED_FILES=$(find content/ru -type f -name
+            echo "⚠️ Ничего не найдено через git log, проверяем все RU-файлы"
+            CHANGED_FILES=$(find content/ru -type f -name "*.md" || true)
+          fi
+
+          echo "📄 Найденные изменённые RU-файлы:"
+          echo "$CHANGED_FILES"
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
       - name: Debug changed files
         run: |
