@@ -30,24 +30,39 @@ jobs:
         run: |
           node <<'NODE'
           import fs from "fs-extra";
-          import glob from "glob";
+          import { glob } from "glob";
           import OpenAI from "openai";
+          import { execSync } from "child_process";
 
           const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-          const ruFiles = glob.sync("content/ru/**/*.md");
+
+          // --- Определяем изменённые файлы ---
+          let changed = [];
+          try {
+            const diff = execSync("git diff --name-only HEAD^ HEAD").toString();
+            changed = diff.split("\n").filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
+          } catch {
+            console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
+          }
+
+          if (changed.length === 0) {
+            changed = glob.sync("content/ru/**/*.md");
+          }
+
+          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
 
           async function translateText(text, lang) {
             const res = await openai.chat.completions.create({
               model: "gpt-4o-mini",
               messages: [
                 { role: "system", content: `Translate the following Markdown text from Russian to ${lang}. Preserve formatting and code blocks.` },
-                { role: "user", content: text },
-              ],
+                { role: "user", content: text }
+              ]
             });
             return res.choices[0].message.content;
           }
 
-          for (const file of ruFiles) {
+          for (const file of changed) {
             const text = fs.readFileSync(file, "utf8");
             const base = file.replace(/^content\/ru\//, "");
 
