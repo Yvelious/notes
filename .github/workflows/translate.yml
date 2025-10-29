@@ -36,7 +36,7 @@ jobs:
 
           git fetch origin ${{ github.ref_name }} --depth=20 || true
 
-          # Получаем список файлов из последнего коммита (всегда работает)
+          # Получаем список файлов из последнего коммита (работает даже при shallow clone)
           CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: "${{ github.sha }}" | grep '^content/ru/.*\.md$' || true)
 
           if [ -z "$CHANGED_FILES" ]; then
@@ -46,7 +46,12 @@ jobs:
 
           echo "📄 Найденные изменённые RU-файлы:"
           echo "$CHANGED_FILES"
-          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
+          {
+            echo "files<<EOF"
+            echo "$CHANGED_FILES"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Debug changed files
         run: |
