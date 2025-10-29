@@ -35,10 +35,7 @@ jobs:
           echo "🧭 Branch: ${{ github.ref_name }}"
           git fetch origin ${{ github.ref_name }} --depth=20 || true
 
-          # Находим все изменённые .md в последнем коммите
           CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: "${{ github.sha }}" | grep '^content/ru/.*\.md$' || true)
-
-          # Если ничего не найдено (например, первый запуск), берём все RU-файлы
           if [ -z "$CHANGED_FILES" ]; then
             echo "⚠️ Нет изменений — берём все RU-файлы"
             CHANGED_FILES=$(find content/ru -type f -name "*.md" || true)
@@ -78,4 +75,16 @@ jobs:
 
           echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
             [ -z "$file" ] && continue
-            # строим путь к целевому файлу
+            target=$(echo "$file" | sed 's|content/ru|content/en|')
+            mkdir -p "$(dirname "$target")"
+            echo "🔁 Translating: '$file' → '$target'"
+            chatgpt-md-translator "$file" "$target"
+          done
+
+      # === Перевод RU → DE ===
+      - name: 🇩🇪 Translate RU → DE
+        if: steps.changes.outputs.files != ''
+        run: |
+          echo "🇩🇪 Переводим на немецкий..."
+          # Конфиг переводчика
+          cat > ~/.chat
