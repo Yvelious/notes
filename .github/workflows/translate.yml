@@ -33,20 +33,16 @@ jobs:
           echo "🧭 Branch: ${{ github.ref_name }}"
           echo "⬅️ Before: ${{ github.event.before }}"
           echo "➡️ After:  ${{ github.sha }}"
-          
+
           git fetch origin ${{ github.ref_name }} --depth=20 || true
 
-          # Если первый коммит или новая ветка — берём все файлы
-          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
-            echo "📘 Первый пуш — берём все файлы из content/ru/"
-            CHANGED_FILES=$(find content/ru -type f -name "*.md")
-          else
-            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/ru/.*\.md$' || true)
-          fi
+          # Проверяем только последний коммит (работает даже при shallow clone)
+          CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: ${{ github.sha }} | grep '^content/ru/.*\.md$' || true)
 
-          echo "📄 Найденные изменённые RU-файлы:"
-          echo "$CHANGED_FILES"
-          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          # Если нет найденных — проверяем все RU-файлы
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "⚠️ Ничего не найдено через git log, берём все файлы content/ru/*.md"
+            CHANGED_FILES=$(find content/ru -type f -name
 
       - name: Debug changed files
         run: |
