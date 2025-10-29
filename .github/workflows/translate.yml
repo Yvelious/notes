@@ -1,4 +1,4 @@
-name: Auto Translate RU → EN/DE (env version)
+name: Auto Translate RU → EN/DE (via OpenAI API)
 
 on:
   push:
@@ -10,68 +10,61 @@ permissions:
 
 jobs:
   translate:
-    if: "!contains(github.event.head_commit.message, 'Auto translations')"
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install chatgpt-md-translator
-        run: npm install -g chatgpt-md-translator
+      - name: Install deps
+        run: npm install openai@4.0.0 fs-extra glob
 
-      - name: Detect RU files
-        id: changes
-        run: |
-          CHANGED_FILES=$(git log -m -1 --name-only --pretty=format: "${{ github.sha }}" | grep '^content/ru/.*\.md$' || true)
-          if [ -z "$CHANGED_FILES" ]; then
-            CHANGED_FILES=$(find content/ru -type f -name "*.md" || true)
-          fi
-          {
-            echo "files<<EOF"
-            echo "$CHANGED_FILES"
-            echo "EOF"
-          } >> $GITHUB_OUTPUT
-
-      - name: Translate RU → EN
-        if: steps.changes.outputs.files != ''
+      - name: Translate changed RU markdown files
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "🌍 Translating to English..."
-          echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
-            [ -z "$file" ] && continue
-            target=$(echo "$file" | sed 's|content/ru|content/en|')
-            mkdir -p "$(dirname "$target")"
-            echo "🔁 $file → $target"
-            npx chatgpt-md-translator "$file" "$target" --model gpt-4o-mini --language en --overwrite
-          done
+          node <<'NODE'
+          import fs from "fs-extra";
+          import glob from "glob";
+          import OpenAI from "openai";
 
-      - name: Translate RU → DE
-        if: steps.changes.outputs.files != ''
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          echo "🇩🇪 Translating to German..."
-          echo "${{ steps.changes.outputs.files }}" | while IFS= read -r file; do
-            [ -z "$file" ] && continue
-            target=$(echo "$file" | sed 's|content/ru|content/de|')
-            mkdir -p "$(dirname "$target")"
-            echo "🔁 $file → $target"
-            npx chatgpt-md-translator "$file" "$target" --model gpt-4o-mini --language de --overwrite
-          done
+          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+          const ruFiles = glob.sync("content/ru/**/*.md");
+
+          async function translateText(text, lang) {
+            const res = await openai.chat.completions.create({
+              model: "gpt-4o-mini",
+              messages: [
+                { role: "system", content: `Translate the following Markdown text from Russian to ${lang}. Preserve formatting and code blocks.` },
+                { role: "user", content: text },
+              ],
+            });
+            return res.choices[0].message.content;
+          }
+
+          for (const file of ruFiles) {
+            const text = fs.readFileSync(file, "utf8");
+            const base = file.replace(/^content\/ru\//, "");
+
+            for (const lang of ["en", "de"]) {
+              const outPath = `content/${lang}/${base}`;
+              fs.ensureDirSync(outPath.replace(/\/[^/]+$/, ""));
+              console.log(`🌍 Translating ${file} → ${outPath}`);
+              const translated = await translateText(text, lang);
+              fs.writeFileSync(outPath, translated, "utf8");
+            }
+          }
+          NODE
 
       - name: Commit translated files
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add content/en content/de || true
-          git commit -m "Auto translations" || echo "No changes"
+          git commit -m "Auto translations" || echo "No new translations"
           git push || echo "Push skipped"
