@@ -19,10 +19,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install deps
-        run: npm install openai@4.0.0 fs-extra glob
+        run: npm install openai fs-extra glob
 
       - name: Translate changed RU markdown files
         env:
