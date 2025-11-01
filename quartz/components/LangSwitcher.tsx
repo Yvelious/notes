@@ -7,9 +7,9 @@ export default (() => {
   const LangSwitcher: QuartzComponent = () => {
     return (
       <nav class="lang-switcher" id="lang-switcher">
-        <a href="/notes/ru/">Ru</a>
-        <a href="/notes/en/">En</a>
-        <a href="/notes/de/">De</a>
+        <a href="/ru/">Ru</a>
+        <a href="/en/">En</a>
+        <a href="/de/">De</a>
       </nav>
     )
   }
