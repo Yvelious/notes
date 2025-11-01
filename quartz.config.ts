@@ -14,8 +14,8 @@ const config: QuartzConfig = {
     analytics: {
       provider: "plausible",
     },
-    locale: "ru-RU",
-    baseUrl: "https://yvelious.github.io/notes/",
+    locale: "en-US",
+    baseUrl: "https://yvelious.github.io/notes/en/",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {
