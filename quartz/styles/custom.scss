@@ -45,9 +45,16 @@ pre {
 		}
 }
 
-.left.sidebar:has(.lang-switcher > a:nth-child(3).active) .explorer-ul > li:nth-child(3) {
+.left.sidebar:has(.lang-switcher > a:nth-child(1).active) .explorer-ul > li:nth-child(1) {
 	display: none;
+}
 
+.left.sidebar:has(.lang-switcher > a:nth-child(2).active) .explorer-ul > li:nth-child(2) {
+		display: none;
+}
+
+.left.sidebar:has(.lang-switcher > a:nth-child(3).active) .explorer-ul > li:nth-child(3) {
+		display: none;
 }
 
 //.explorer-ul > li > .folder-container {
