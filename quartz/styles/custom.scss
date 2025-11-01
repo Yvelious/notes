@@ -57,12 +57,12 @@ pre {
 		display: none;
 }
 
-//.explorer-ul > li > .folder-container {
-//		display: none !important;
-//
-//		& + .folder-outer > .content {
-//				border-left: none !important;
-//				margin-left: 0 !important;
-//				padding-left: 0 !important;
-//		}
-//}
+.explorer-ul > li > .folder-container {
+		display: none !important;
+
+		& + .folder-outer > .content {
+				border-left: none !important;
+				margin-left: 0 !important;
+				padding-left: 0 !important;
+		}
+}
