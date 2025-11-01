@@ -45,6 +45,10 @@ pre {
 		}
 }
 
+.left.sidebar:has(.lang-switcher > a:nth-child(3).active) .explorer-ul > li:nth-child(3) {
+	display: none;
+
+}
 
 //.explorer-ul > li > .folder-container {
 //		display: none !important;
