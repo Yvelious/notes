@@ -4,12 +4,13 @@ import { QuartzComponent, QuartzComponentConstructor } from "./types"
 import langScript from "./scripts/lang-switcher.inline"
 
 export default (() => {
-  const LangSwitcher: QuartzComponent = () => {
+  const LangSwitcher: QuartzComponent = ({cfg}) => {
+    const baseUrl = cfg?.baseUrl ?? "/"
     return (
       <nav class="lang-switcher" id="lang-switcher">
-        <a href="/notes/de/">De</a>
-        <a href="/notes/en/">En</a>
-        <a href="/notes/ru/">Ru</a>
+        <a href={`${baseUrl}de/`} data-href={'/de/'}>De</a>
+        <a href={`${baseUrl}en/`} data-href={'/en/'}>En</a>
+        <a href={`${baseUrl}ru/`} data-href={'/ru/'}>Ru</a>
       </nav>
     )
   }
