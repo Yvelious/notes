@@ -12,12 +12,8 @@ function highlightLang() {
 
     a.setAttribute("href", newPath)
 
-    console.log(hrefPath);
-    console.log(path)
-
-
     // Highlight if the current path matches/is inside the desired language
-    if (hrefPath === "/" ? path === "/" : (path === hrefPath || path.startsWith(hrefPath))) {
+    if (hrefPath === "/" ? path === "/" : (path === hrefPath || path.includes(hrefPath))) {
       a.classList.add("active")
     }
   })
