@@ -1,5 +1,5 @@
 ---
-title: Добро пожаловать в мои DEV-заметки
+title: Welcome to my Dev Notes
 ---
 
-Здесь я буду писать свои мысли, знания и опыт касательно разработки.
+This is where I share my thoughts, knowledge, and experience about development.

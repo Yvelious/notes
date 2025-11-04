@@ -1,6 +1,5 @@
 ---
-title: Добро пожаловать в мои DEV-заметки
-slug: "de"
+title: Willkommen in meinen Entwickler-Notizen
 ---
 
-Здесь я буду писать свои мысли, знания и опыт касательно разработки.
+Hier teile ich meine Gedanken, mein Wissen und meine Erfahrungen über die Entwicklung.
