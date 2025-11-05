@@ -3,7 +3,6 @@ created: 2025-03-11
 idnote: 7Gzdydj2NN
 vault: dev
 title: Цикл жизни задачи
-slug: Life-cycle-of
 path:
 tags:
   - jira
