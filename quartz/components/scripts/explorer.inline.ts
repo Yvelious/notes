@@ -109,6 +109,7 @@ function createFolderNode(
   const ul = folderOuter.querySelector("ul") as HTMLUListElement
 
   const folderPath = node.slug
+  li.dataset.path = folderPath
   folderContainer.dataset.folderpath = folderPath
 
   if (opts.folderClickBehavior === "link") {

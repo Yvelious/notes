@@ -57,17 +57,31 @@ pre {
 		}
 }
 
-.left.sidebar:has(.lang-switcher > a:nth-child(1).active) .explorer-ul > li:not(:nth-child(1)) {
-	display: none;
+.left.sidebar {
+		&:has(.lang-switcher > a:nth-child(1).active) {
+				.explorer-ul > li:not([data-path="de/index"]) {
+						display: none;
+				}
+		}
 }
 
-.left.sidebar:has(.lang-switcher > a:nth-child(2).active) .explorer-ul > li:not(:nth-child(2)) {
-		display: none;
+.left.sidebar {
+		&:has(.lang-switcher > a:nth-child(2).active) {
+				.explorer-ul > li:not([data-path="en/index"]) {
+						display: none;
+				}
+		}
 }
 
-.left.sidebar:has(.lang-switcher > a:nth-child(3).active) .explorer-ul > li:not(:nth-child(3)) {
-		display: none;
+.left.sidebar {
+		&:has(.lang-switcher > a:nth-child(3).active) {
+				.explorer-ul > li:not([data-path="ru/index"]) {
+						display: none;
+				}
+		}
 }
+
+
 
 .explorer-ul > li > .folder-container {
 		display: none !important;
