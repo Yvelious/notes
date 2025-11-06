@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo (with history)
+      - name: Checkout repo (with full history)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # нужно для доступа к HEAD^
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -29,33 +29,42 @@ jobs:
       - name: Translate changed RU markdown files
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GIT_BEFORE: ${{ github.event.before }}
+          GIT_AFTER: ${{ github.sha }}
         run: |
-          node <<'NODE'
+          echo "🔍 BEFORE: $GIT_BEFORE"
+          echo "🔍 AFTER: $GIT_AFTER"
+
+          node -e '
           import fs from "fs-extra";
           import { glob } from "glob";
           import OpenAI from "openai";
           import { execSync } from "child_process";
 
           const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-          const before = process.env.BEFORE;
-          const after = process.env.AFTER;
+          const before = process.env.GIT_BEFORE;
+          const after = process.env.GIT_AFTER;
 
           console.log("🔍 BEFORE:", before);
           console.log("🔍 AFTER:", after);
 
           let changed = [];
-
           try {
             if (!before || before === "0000000000000000000000000000000000000000") {
               console.log("🟡 Похоже, это первый коммит. Возьмём все RU-файлы.");
             } else {
               const diff = execSync(`git diff --name-only --diff-filter=ACMR ${before} ${after}`).toString();
-              changed = diff
-                .split("\n")
-                .filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
+              changed = diff.split("\n").filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
             }
           } catch (e) {
             console.log("⚠️ Ошибка diff:", e.message);
           }
 
-          NODE
+          if (changed.length === 0) {
+            console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
+            changed = glob.sync("content/ru/**/*.md");
+          }
+
+          console.log("📄 Файлы для перевода:\\n", changed.join("\\n"));
+          '
+
