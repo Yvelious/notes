@@ -35,10 +35,6 @@ jobs:
           echo "🔍 BEFORE: $GIT_BEFORE"
           echo "🔍 AFTER:  $GIT_AFTER"
 
-          # гарантируем наличие обоих коммитов локально
-          echo "📥 Fetching previous commit..."
-          git fetch origin $GIT_BEFORE --depth=1 || echo "⚠️ Не удалось fetch предыдущий коммит"
-
           node <<'NODE'
           import fs from "fs-extra";
           import { glob } from "glob";
@@ -49,19 +45,23 @@ jobs:
           const before = process.env.GIT_BEFORE;
           const after = process.env.GIT_AFTER;
 
-          let changed = [];
+          console.log(`🔍 BEFORE: ${before}`);
+          console.log(`🔍 AFTER:  ${after}`);
 
+          let changed = [];
           try {
             if (!before || before === "0000000000000000000000000000000000000000") {
               console.log("🟡 Первый коммит — берём все RU-файлы");
             } else {
-              console.log(`🔍 Сравниваем ${before} → ${after}`);
-              const diff = execSync(`git diff --name-only --diff-filter=ACMR ${before} ${after}`).toString();
-              changed = diff.split("\n").filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
-              console.log("🧩 Найдено изменённых файлов:", changed.length);
+              console.log(`🔎 Проверяем изменения через git diff-tree...`);
+              const diff = execSync(`git diff-tree --no-commit-id --name-only -r ${before} ${after}`).toString();
+              changed = diff
+                .split("\n")
+                .filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
+              console.log(`🧩 Найдено изменённых файлов: ${changed.length}`);
             }
           } catch (e) {
-            console.log("⚠️ Ошибка diff:", e.message);
+            console.log("⚠️ Ошибка при diff:", e.message);
           }
 
           if (changed.length === 0) {
@@ -69,6 +69,5 @@ jobs:
             changed = glob.sync("content/ru/**/*.md");
           }
 
-          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
-
+          console.log("📄 Файлы для перевода:\n" + changed.join("\n"));
           NODE
