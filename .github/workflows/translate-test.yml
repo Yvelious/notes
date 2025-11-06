@@ -43,7 +43,7 @@ jobs:
           // --- Определяем изменённые файлы ---
           let changed = [];
           try {
-            const diff = execSync("git diff --name-only HEAD^ -- HEAD").toString();
+            const diff = execSync('git diff --name-only HEAD^ HEAD', { encoding: 'utf8' }).toString();
             changed = diff.split("\n").filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
           } catch {
             console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
