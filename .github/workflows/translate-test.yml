@@ -65,58 +65,57 @@ jobs:
           console.log(`Найдено ${changed.length} файлов:\n  ${changed.join('\n  ')}`);
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `files=${filesList}\ntranslated=true\n`);
           JS
+          - name: Translate to EN/DE
+            if: ${{ steps.detect.outputs.translated == 'true' }}
+            id: translate
+            env:
+              OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+              CHANGED_FILES: ${{ steps.detect.outputs.files }}
+            run: |
+              node - <<'JS'
+              import fs from 'fs-extra';
+              import path from 'path';
+              import OpenAI from 'openai';
+          
+              const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+              const files = process.env.CHANGED_FILES.split(',').filter(Boolean);
+          
+              async function translateText(text, lang) {
+                const res = await openai.chat.completions.create({
+                  model: "gpt-4o-mini",
+                  messages: [
+                    { role: "system", content: `Translate from Russian to ${lang === 'en' ? 'English' : 'German'}. Keep Markdown, code blocks, and frontmatter.` },
+                    { role: "user", content: text }
+                  ],
+                  temperature: 0.3
+                });
+                return res.choices[0].message.content.trim();
+              }
+          
+              const translatedFiles = [];
+              for (const file of files) {
+                const text = await fs.readFile(file, 'utf8');
+                const relative = file.replace(/^content\/ru\//, '');
+          
+                for (const lang of ['en', 'de']) {
+                  const outPath = `content/${lang}/${relative}`;
+                  await fs.ensureDir(path.dirname(outPath));
+                  console.log(`Translating ${file} to ${outPath}`);
+                  const translated = await translateText(text, lang);
+                  await fs.writeFile(outPath, translated, 'utf8');
+                  translatedFiles.push(outPath);
+                }
+              }
+          
+              console.log(`Переведено ${translatedFiles.length} файлов`);
+              JS
 
-      - name: Translate to EN/DE
-      if: ${{ steps.detect.outputs.translated == 'true' }}
-      id: translate
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        CHANGED_FILES: ${{ steps.detect.outputs.files }}
-      run: |
-        node - <<'JS'
-        import fs from 'fs-extra';
-        import path from 'path';
-        import OpenAI from 'openai';
-        
-        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-        const files = process.env.CHANGED_FILES.split(',').filter(Boolean);
-        
-        async function translateText(text, lang) {
-        const res = await openai.chat.completions.create({
-         model: "gpt-4o-mini",
-         messages: [
-           { role: "system", content: `Translate from Russian to ${lang === 'en' ? 'English' : 'German'}. Keep Markdown, code blocks, and frontmatter.` },
-           { role: "user", content: text }
-         ],
-         temperature: 0.3
-        });
-        return res.choices[0].message.content.trim();
-        }
-        
-        const translatedFiles = [];
-        for (const file of files) {
-        const text = await fs.readFile(file, 'utf8');
-        const relative = file.replace(/^content\/ru\//, '');
-        
-        for (const lang of ['en', 'de']) {
-         const outPath = `content/${lang}/${relative}`;
-         await fs.ensureDir(path.dirname(outPath));
-         console.log(`Translating ${file} to ${outPath}`);
-         const translated = await translateText(text, lang);
-         await fs.writeFile(outPath, translated, 'utf8');
-         translatedFiles.push(outPath);
-        }
-        }
-        
-        console.log(`Переведено ${translatedFiles.length} файлов`);
-        JS
-        
-        # === Коммитим переводы ===
-        - name: Commit translations
-          if: ${{ steps.detect.outputs.translated == 'true' }}
-          run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add content/en/ content/de/
-            git commit -m "Auto-translate: RU → EN/DE [skip ci]" || echo "Nothing to commit"
-            git push
+      # === Коммитим переводы ===
+      - name: Commit translations
+        if: ${{ steps.detect.outputs.translated == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/en/ content/de/
+          git commit -m "Auto-translate: RU → EN/DE [skip ci]" || echo "Nothing to commit"
+          git push
