@@ -23,6 +23,9 @@ jobs:
 
       - name: Install deps
         run: npm install openai fs-extra glob
+      - name: Some chenages in commit path names
+        run: |
+          git config core.quotepath false
 
       - name: Translate changed RU markdown files
         env:
@@ -35,9 +38,7 @@ jobs:
           import { execSync } from "child_process";
 
           const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-          
-          git config core.quotepath false  # важная строка!
-
+        
 
           // --- Определяем изменённые файлы ---
           let changed = [];
