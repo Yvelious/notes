@@ -14,7 +14,10 @@ jobs:
       - name: Checkout with history
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # Нужно для HEAD^
+          fetch-depth: 2
+
+      - name: Enable correct handling of Cyrillic paths
+        run: git config core.quotepath false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -23,18 +26,26 @@ jobs:
 
       - name: Detect changed RU .md files
         id: detect
+        env:
+          GITHUB_OUTPUT: ${{ runner.temp }}/.github_output
         run: |
           node - <<'JS'
+          const fs = require('fs');
+          const path = require('path');
           const { execSync } = require('child_process');
+
+          const outputPath = process.env.GITHUB_OUTPUT;
 
           let changed = [];
           try {
             const diff = execSync('git diff --name-only HEAD^ HEAD', { encoding: 'utf8' }).trim();
             changed = diff
               .split('\n')
+              .map(line => line.trim())
+              .filter(line => line.startsWith('content/ru/') && line.endsWith('.md'))
               .filter(Boolean);
           } catch (err) {
-            console.log('Нет предыдущего коммита (первый push)');
+            console.log('Первый коммит или нет diff — продолжаем без изменений');
           }
 
           if (changed.length === 0) {
@@ -43,7 +54,8 @@ jobs:
             console.log('Изменённые файлы:');
             changed.forEach(f => console.log('  ' + f));
           }
-          // Выводим как JSON-массив для GITHUB_OUTPUT
-          const output = changed.join(',');
-          console.log(`::set-output name=files::${output}`);
+
+          // Записываем в environment file (новый способ)
+          const filesList = changed.join(',');
+          fs.appendFileSync(outputPath, `files=${filesList}\n`);
           JS
