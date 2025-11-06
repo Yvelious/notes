@@ -1,4 +1,4 @@
-name: Auto Translate RU → EN/DE (via OpenAI API)
+name: 1Auto Translate RU → EN/DE (via OpenAI API)
 
 on:
   push:
