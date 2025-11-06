@@ -1,58 +1,51 @@
-name: Auto Translate RU → EN/DE (via OpenAI API)
+name: Detect Changed RU Files (JS)
 
 on:
   push:
     paths:
       - "content/ru/**/*.md"
 
-permissions:
-  contents: write
-
 jobs:
-  translate:
+  detect:
     runs-on: ubuntu-latest
-
+    outputs:
+      files: ${{ steps.detect.outputs.files }}
     steps:
-      - name: Checkout repo
+      - name: Checkout with history
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Нужно для HEAD^
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
 
-      - name: Install deps
-        run: npm install openai fs-extra glob
-      - name: Some chenages in commit path names
+      - name: Detect changed RU .md files
+        id: detect
         run: |
-          git config core.quotepath false
+          node - <<'JS'
+          const { execSync } = require('child_process');
 
-      - name: Translate changed RU markdown files
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          node <<'NODE'
-          import fs from "fs-extra";
-          import { glob } from "glob";
-          import OpenAI from "openai";
-          import { execSync } from "child_process";
-
-          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-        
-
-          // --- Определяем изменённые файлы ---
           let changed = [];
           try {
-            const diff = execSync('git diff --name-only HEAD^ HEAD', { encoding: 'utf8' }).toString();
-            changed = diff.split("\n").filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
-          } catch {
-            console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
+            const diff = execSync('git diff --name-only HEAD^ HEAD', { encoding: 'utf8' }).trim();
+            changed = diff
+              .split('\n')
+              .filter(line => line.startsWith('content/ru/') && line.endsWith('.md'))
+              .filter(Boolean);
+          } catch (err) {
+            console.log('Нет предыдущего коммита (первый push)');
           }
 
           if (changed.length === 0) {
-            changed = glob.sync("content/ru/**/*.md");
+            console.log('Нет изменённых .md файлов в content/ru/');
+          } else {
+            console.log('Изменённые файлы:');
+            changed.forEach(f => console.log('  ' + f));
           }
 
-          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
-
-          NODE
+          // Выводим как JSON-массив для GITHUB_OUTPUT
+          const output = changed.join(',');
+          console.log(`::set-output name=files::${output}`);
+          JS
