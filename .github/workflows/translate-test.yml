@@ -32,24 +32,18 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "🔍 Определяем изменения относительно origin/v4"
-          git fetch origin v4 --depth=10 || echo "⚠️ Не удалось fetch origin/v4"
+          echo "🔍 Определяем изменения..."
+          git config core.quotepath false  # важная строка!
+          git fetch origin v4 --depth=10 || true
 
           echo "📂 Последние коммиты:"
-          git log --oneline -10 || true
+          git log --oneline -5 || true
 
-          echo "🧩 Ищем изменения в content/ru/"
-          CHANGED=$(git diff --name-only --diff-filter=ACMR origin/v4...HEAD || true)
+          echo "🧩 Проверяем изменения за последние 7 коммитов"
+          CHANGED=$(git diff --name-only --diff-filter=ACMR HEAD~7..HEAD | grep '^content/ru/.*\.md$' || true)
 
-          # Если не найдено — проверяем последние 5 коммитов
           if [ -z "$CHANGED" ]; then
-            git config core.quotepath false
-            CHANGED=$(git diff --name-only --diff-filter=ACMR HEAD~7..HEAD | grep '^content/ru/.*\.md$'
-          fi
-
-          # Если всё равно пусто — берём все RU-файлы
-          if [ -z "$CHANGED" ]; then
-            echo "⚠️ Всё ещё пусто — берём все RU-файлы"
+            echo "⚠️ Не найдено изменений, берём все RU-файлы"
             CHANGED=$(find content/ru -type f -name '*.md' | sort)
           fi
 
@@ -60,20 +54,3 @@ jobs:
           echo "$CHANGED" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Translate changed files via OpenAI
-        if: ${{ env.CHANGED != '' }}
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          node <<'NODE'
-          import fs from "fs-extra";
-          import { glob } from "glob";
-          import OpenAI from "openai";
-
-          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-          const changed = process.env.CHANGED
-            ? process.env.CHANGED.split("\n").filter(Boolean)
-            : glob.sync("content/ru/**/*.md");
-
-          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
-          NODE
