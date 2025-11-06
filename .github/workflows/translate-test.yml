@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2  # этого достаточно
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -26,48 +26,38 @@ jobs:
       - name: Install deps
         run: npm install openai fs-extra glob
 
-      - name: Translate changed RU markdown files
+      - name: Determine changed RU files and translate
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GIT_BEFORE: ${{ github.event.before }}
-          GIT_AFTER: ${{ github.sha }}
         run: |
-          echo "🔍 BEFORE: $GIT_BEFORE"
-          echo "🔍 AFTER:  $GIT_AFTER"
+          echo "🔍 Определяем изменённые файлы..."
+          # Подтянем ветку main для сравнения
+          git fetch origin main --depth=2 || true
+          
+          echo "📂 Последние коммиты:"
+          git log --oneline -3 || true
+          
+          echo "🧩 Ищем изменения в content/ru/"
+          CHANGED=$(git diff --name-only --diff-filter=ACMR origin/main...HEAD | grep '^content/ru/.*\.md$' || true)
+
+          if [ -z "$CHANGED" ]; then
+            echo "⚠️ Изменений не найдено, берём все RU-файлы"
+            CHANGED=$(find content/ru -type f -name '*.md' | sort)
+          fi
+
+          echo "📄 Файлы для перевода:"
+          echo "$CHANGED"
 
           node <<'NODE'
           import fs from "fs-extra";
           import { glob } from "glob";
           import OpenAI from "openai";
-          import { execSync } from "child_process";
 
           const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-          const before = process.env.GIT_BEFORE;
-          const after = process.env.GIT_AFTER;
+          const changed = process.env.CHANGED
+            ? process.env.CHANGED.split("\n").filter(Boolean)
+            : glob.sync("content/ru/**/*.md");
 
-          console.log(`🔍 BEFORE: ${before}`);
-          console.log(`🔍 AFTER:  ${after}`);
+          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
 
-          let changed = [];
-          try {
-            if (!before || before === "0000000000000000000000000000000000000000") {
-              console.log("🟡 Первый коммит — берём все RU-файлы");
-            } else {
-              console.log(`🔎 Проверяем изменения через git diff-tree...`);
-              const diff = execSync(`git diff-tree --no-commit-id --name-only -r ${before} ${after}`).toString();
-              changed = diff
-                .split("\n")
-                .filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
-              console.log(`🧩 Найдено изменённых файлов: ${changed.length}`);
-            }
-          } catch (e) {
-            console.log("⚠️ Ошибка при diff:", e.message);
-          }
-
-          if (changed.length === 0) {
-            console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
-            changed = glob.sync("content/ru/**/*.md");
-          }
-
-          console.log("📄 Файлы для перевода:\n" + changed.join("\n"));
           NODE
