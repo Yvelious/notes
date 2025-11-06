@@ -50,5 +50,4 @@ jobs:
           }
 
           console.log("📄 Файлы для перевода:\n", changed.join("\n"));
-
           NODE
