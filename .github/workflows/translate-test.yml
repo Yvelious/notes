@@ -1,0 +1,54 @@
+name: Auto Translate RU → EN/DE (via OpenAI API)
+
+on:
+  push:
+    paths:
+      - "content/ru/**/*.md"
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: npm install openai fs-extra glob
+
+      - name: Translate changed RU markdown files
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          node <<'NODE'
+          import fs from "fs-extra";
+          import { glob } from "glob";
+          import OpenAI from "openai";
+          import { execSync } from "child_process";
+
+          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+          // --- Определяем изменённые файлы ---
+          let changed = [];
+          try {
+            const diff = execSync("git diff --name-only HEAD^ HEAD").toString();
+            changed = diff.split("\n").filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
+          } catch {
+            console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
+          }
+
+          if (changed.length === 0) {
+            changed = glob.sync("content/ru/**/*.md");
+          }
+
+          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
+
+          NODE
