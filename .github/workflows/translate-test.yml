@@ -1,29 +1,37 @@
-name: Detect Changed RU Files (JS)
+name: Auto Translate RU → EN/DE
 
 on:
   push:
     paths:
       - "content/ru/**/*.md"
 
+permissions:
+  contents: write
+
 jobs:
-  detect:
+  translate:
     runs-on: ubuntu-latest
     outputs:
       files: ${{ steps.detect.outputs.files }}
+      translated: ${{ steps.translate.outputs.translated }}
     steps:
       - name: Checkout with history
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Enable correct handling of Cyrillic paths
+      - name: Enable Cyrillic path handling
         run: git config core.quotepath false
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
+      - name: Install dependencies
+        run: npm install openai fs-extra
+
+      # === ШАГ 1: Определяем изменённые файлы ===
       - name: Detect changed RU .md files
         id: detect
         env:
@@ -31,31 +39,85 @@ jobs:
         run: |
           node - <<'JS'
           const fs = require('fs');
-          const path = require('path');
           const { execSync } = require('child_process');
-
-          const outputPath = process.env.GITHUB_OUTPUT;
 
           let changed = [];
           try {
             const diff = execSync('git diff --name-only HEAD^ HEAD', { encoding: 'utf8' }).trim();
             changed = diff
               .split('\n')
-              .map(line => line.trim())
-              .filter(line => line.startsWith('content/ru/') && line.endsWith('.md'))
+              .map(f => f.trim())
+              .filter(f => f.startsWith('content/ru/') && f.endsWith('.md'))
               .filter(Boolean);
           } catch (err) {
-            console.log('Первый коммит или нет diff — продолжаем без изменений');
+            console.log('Первый коммит — переводим все');
+            const glob = require('glob');
+            changed = glob.sync('content/ru/**/*.md');
           }
 
           if (changed.length === 0) {
-            console.log('Нет изменённых .md файлов в content/ru/');
-          } else {
-            console.log('Изменённые файлы:');
-            changed.forEach(f => console.log('  ' + f));
+            console.log('Нет файлов для перевода');
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, 'files=\ntranslated=false\n');
+            process.exit(0);
           }
 
-          // Записываем в environment file (новый способ)
           const filesList = changed.join(',');
-          fs.appendFileSync(outputPath, `files=${filesList}\n`);
+          console.log(`Найдено ${changed.length} файлов:\n  ${changed.join('\n  ')}`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `files=${filesList}\ntranslated=true\n`);
           JS
+
+      # === ШАГ 2: Переводим найденные файлы ===
+      - name: Translate to EN/DE
+        if: ${{ steps.detect.outputs.translated == 'true' }}
+        id: translate
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CHANGED_FILES: ${{ steps.detect.outputs.files }}
+        run: |
+          node - <<'JS'
+          const fs = require('fs-extra');
+          const path = require('path');
+          const { OpenAI } = require('openai');
+
+          const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+          const files = process.env.CHANGED_FILES.split(',').filter(Boolean);
+
+          async function translateText(text, lang) {
+            const res = await openai.chat.completions.create({
+              model: "gpt-4o-mini",
+              messages: [
+                { role: "system", content: `Translate from Russian to ${lang === 'en' ? 'English' : 'German'}. Keep Markdown, code blocks, and frontmatter.` },
+                { role: "user", content: text }
+              ],
+              temperature: 0.3
+            });
+            return res.choices[0].message.content.trim();
+          }
+
+          const translatedFiles = [];
+          for (const file of files) {
+            const text = fs.readFileSync(file, 'utf8');
+            const relative = file.replace(/^content\/ru\//, '');
+
+            for (const lang of ['en', 'de']) {
+              const outPath = `content/${lang}/${relative}`;
+              await fs.ensureDir(path.dirname(outPath));
+              console.log(`Translating ${file} → ${outPath}`);
+              const translated = await translateText(text, lang);
+              fs.writeFileSync(outPath, translated, 'utf8');
+              translatedFiles.push(outPath);
+            }
+          }
+
+          console.log(`Переведено ${translatedFiles.length} файлов`);
+          JS
+
+      # === Коммитим переводы ===
+      - name: Commit translations
+        if: ${{ steps.detect.outputs.translated == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/en/ content/de/
+          git commit -m "Auto-translate: RU → EN/DE [skip ci]" || echo "Nothing to commit"
+          git push
