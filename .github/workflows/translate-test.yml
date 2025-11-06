@@ -32,7 +32,6 @@ jobs:
             const diff = execSync('git diff --name-only HEAD^ HEAD', { encoding: 'utf8' }).trim();
             changed = diff
               .split('\n')
-              .filter(line => line.startsWith('content/ru/') && line.endsWith('.md'))
               .filter(Boolean);
           } catch (err) {
             console.log('Нет предыдущего коммита (первый push)');
