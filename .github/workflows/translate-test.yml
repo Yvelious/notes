@@ -44,7 +44,6 @@ jobs:
             console.log('Изменённые файлы:');
             changed.forEach(f => console.log('  ' + f));
           }
-
           // Выводим как JSON-массив для GITHUB_OUTPUT
           const output = changed.join(',');
           console.log(`::set-output name=files::${output}`);
