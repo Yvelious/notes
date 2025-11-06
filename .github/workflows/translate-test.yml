@@ -44,7 +44,7 @@ jobs:
           # Если не найдено — проверяем последние 5 коммитов
           if [ -z "$CHANGED" ]; then
             echo "⚠️ Дифф пуст — проверим последние 5 коммитов"
-            CHANGED=$(git diff --name-only --diff-filter=ACMR HEAD~10..HEAD || true)
+            CHANGED=$(git diff --name-only --diff-filter=ACMR HEAD~7..HEAD || true)
           fi
 
           # Если всё равно пусто — берём все RU-файлы
