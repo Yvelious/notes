@@ -38,7 +38,7 @@ jobs:
           git log --oneline -3 || true
           
           echo "🧩 Ищем изменения в content/ru/"
-          CHANGED=$(git diff --name-only --diff-filter=ACMR origin/main...HEAD | grep '^content/ru/.*\.md$' || true)
+          CHANGED=$(git diff --name-only --diff-filter=ACMR origin/v4...HEAD | grep '^content/ru/.*\.md$' || true)
 
           if [ -z "$CHANGED" ]; then
             echo "⚠️ Изменений не найдено, берём все RU-файлы"
