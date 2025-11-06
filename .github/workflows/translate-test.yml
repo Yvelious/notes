@@ -2,6 +2,8 @@ name: Auto Translate RU → EN/DE (via OpenAI API)
 
 on:
   push:
+    branches:
+      - v4
     paths:
       - "content/ru/**/*.md"
 
@@ -16,7 +18,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # этого достаточно
+          fetch-depth: 10  # возьмём немного истории, чтобы diff работал
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -26,28 +28,43 @@ jobs:
       - name: Install deps
         run: npm install openai fs-extra glob
 
-      - name: Determine changed RU files and translate
+      - name: Detect changed RU markdown files
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "🔍 Определяем изменённые файлы..."
-          # Подтянем ветку main для сравнения
-          git fetch origin main --depth=2 || true
-          
+          echo "🔍 Определяем изменения относительно origin/v4"
+          git fetch origin v4 --depth=10 || echo "⚠️ Не удалось fetch origin/v4"
+
           echo "📂 Последние коммиты:"
-          git log --oneline -3 || true
-          
+          git log --oneline -5 || true
+
           echo "🧩 Ищем изменения в content/ru/"
           CHANGED=$(git diff --name-only --diff-filter=ACMR origin/v4...HEAD | grep '^content/ru/.*\.md$' || true)
 
+          # Если не найдено — проверяем последние 5 коммитов
           if [ -z "$CHANGED" ]; then
-            echo "⚠️ Изменений не найдено, берём все RU-файлы"
+            echo "⚠️ Дифф пуст — проверим последние 5 коммитов"
+            CHANGED=$(git diff --name-only --diff-filter=ACMR HEAD~5..HEAD | grep '^content/ru/.*\.md$' || true)
+          fi
+
+          # Если всё равно пусто — берём все RU-файлы
+          if [ -z "$CHANGED" ]; then
+            echo "⚠️ Всё ещё пусто — берём все RU-файлы"
             CHANGED=$(find content/ru -type f -name '*.md' | sort)
           fi
 
           echo "📄 Файлы для перевода:"
           echo "$CHANGED"
 
+          echo "CHANGED<<EOF" >> $GITHUB_ENV
+          echo "$CHANGED" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Translate changed files via OpenAI
+        if: ${{ env.CHANGED != '' }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
           node <<'NODE'
           import fs from "fs-extra";
           import { glob } from "glob";
@@ -59,5 +76,4 @@ jobs:
             : glob.sync("content/ru/**/*.md");
 
           console.log("📄 Файлы для перевода:\n", changed.join("\n"));
-
           NODE
