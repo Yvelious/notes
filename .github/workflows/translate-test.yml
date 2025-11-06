@@ -36,7 +36,7 @@ jobs:
           git fetch origin v4 --depth=10 || echo "⚠️ Не удалось fetch origin/v4"
 
           echo "📂 Последние коммиты:"
-          git log --oneline -5 || true
+          git log --oneline -10 || true
 
           echo "🧩 Ищем изменения в content/ru/"
           CHANGED=$(git diff --name-only --diff-filter=ACMR origin/v4...HEAD | grep '^content/ru/.*\.md$' || true)
