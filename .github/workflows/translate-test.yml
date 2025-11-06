@@ -37,30 +37,25 @@ jobs:
           import { execSync } from "child_process";
 
           const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+          const before = process.env.BEFORE;
+          const after = process.env.AFTER;
 
-          // --- Определяем изменённые файлы ---
+          console.log("🔍 BEFORE:", before);
+          console.log("🔍 AFTER:", after);
+
           let changed = [];
+
           try {
-            // Проверяем, существует ли предыдущий коммит
-            try {
-              execSync("git rev-parse HEAD^", { stdio: "ignore" });
-            } catch {
-              // Попробуем получить предыдущий, если только один коммит
-              execSync("git fetch --depth=2 origin $(git rev-parse --abbrev-ref HEAD)", { stdio: "inherit" });
+            if (!before || before === "0000000000000000000000000000000000000000") {
+              console.log("🟡 Похоже, это первый коммит. Возьмём все RU-файлы.");
+            } else {
+              const diff = execSync(`git diff --name-only --diff-filter=ACMR ${before} ${after}`).toString();
+              changed = diff
+                .split("\n")
+                .filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
             }
-
-            const diff = execSync("git diff --name-only --diff-filter=ACMR HEAD^ HEAD || true").toString();
-            changed = diff
-              .split("\n")
-              .filter(f => f.startsWith("content/ru/") && f.endsWith(".md"));
           } catch (e) {
-            console.log("⚠️ Ошибка при определении diff:", e.message);
+            console.log("⚠️ Ошибка diff:", e.message);
           }
 
-          if (changed.length === 0) {
-            console.log("⚠️ Не удалось определить изменения, переводим все RU-файлы");
-            changed = glob.sync("content/ru/**/*.md");
-          }
-
-          console.log("📄 Файлы для перевода:\n", changed.join("\n"));
           NODE
