@@ -16,7 +16,7 @@ jobs:
       translated: ${{ steps.translate.outputs.translated }}
     steps:
       - name: Checkout with history
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
 
@@ -24,7 +24,7 @@ jobs:
         run: git config core.quotepath false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
 
