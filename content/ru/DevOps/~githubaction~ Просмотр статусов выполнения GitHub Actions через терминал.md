@@ -13,7 +13,8 @@ published: 2026-01-08
 symlink:
 symlinkchapter: DevOps
 ---
-
+  
+![[Pasted image 20260108204819.png]]
 
 Каждый раз заходить на GitHub через web-интерфейс, чтобы отслеживать выполнение GitHub Actions, не слишком удобно — особенно если ты часто делаешь push и хочешь сразу видеть результат CI.
 
@@ -30,10 +31,14 @@ symlinkchapter: DevOps
 [https://cli.github.com/](https://cli.github.com/)
 
 На macOS удобнее всего установить через Homebrew:
-`brew install gh`
+```bash
+brew install gh
+```
 
 После установки нужно авторизоваться в своём GitHub-аккаунте:
-`gh auth login`
+```bash
+gh auth login
+```
 
 Выбираем cпособ авторизации:
 - GitHub.com
@@ -46,7 +51,9 @@ symlinkchapter: DevOps
 ## Просмотр списка GitHub Actions
 
 Чтобы посмотреть список всех запусков GitHub Actions в репозитории, используется команда:
-`gh run list`
+```bash
+gh run list
+```
 
 ![[Pasted image 20260108200706.png]]
 
@@ -163,7 +170,9 @@ gh run watch $(gh run list -L 1 --json databaseId -q ".[0].databaseId")
 
 `watch` — это утилита, которая позволяет запускать команду каждые N секунд и обновлять вывод в терминале.
 На macOS её можно установить через Homebrew:
-`brew install watch`
+```bash
+brew install watch
+```
 После этого можно запустить, например:
 `watch -n 5 'gh run list -L 5'`
 
