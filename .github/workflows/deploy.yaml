@@ -2,8 +2,10 @@ name: Deploy Quartz site to GitHub Pages
 
 on:
   push:
-    branches:
-      - v4
+    workflow_run:
+      workflows: [ "Auto Translate RU → EN/DE" ]
+      types:
+        - completed
 
 permissions:
   contents: read
