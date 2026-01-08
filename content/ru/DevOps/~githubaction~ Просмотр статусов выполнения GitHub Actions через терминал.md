@@ -66,7 +66,7 @@ symlinkchapter: DevOps
 
 Если, к примеру, нужно вывести **5 последних запусков**, можно использовать флаг `-L`:
 
-```
+```bash
 gh run list -L 5
 ```
 
@@ -84,13 +84,13 @@ GitHub CLI позволяет получать данные в формате JS
 
 можно использовать команду:
 
-```
+```bash
 gh run list -L 5 \   --json databaseId,status,conclusion,workflowName \   -q '.[] | "\(.status) | \(.conclusion // "null") | \(.workflowName) | #\(.databaseId)"'
 ```
 
 В результате в терминале будет отображаться компактный список в удобном формате:
 
-```
+```bash
 in_progress | null    | build-and-test | #59722592906 
 completed   | success | deploy         | #59722592810 
 completed   | failure | lint           | #59722592744
@@ -113,27 +113,37 @@ completed   | failure | lint           | #59722592744
 ### Фильтрация по статусу
 
 Можно вывести только те workflow, которые сейчас выполняются:
-`gh run list --status in_progress`
+```bash
+gh run list --status in_progress
+```
 
 Аналогично можно смотреть только ожидающие в очереди:
-`gh run list --status queued`
+```bash
+gh run list --status queued
+```
 
 
 ## Просмотр деталей конкретного запуска
 
 У каждого запуска есть свой `id`. Его можно взять из вывода команды `gh run list`.
 Чтобы посмотреть, как выполнился конкретный GitHub Action:
-`gh run view --job=59722592906`
+```bash
+gh run view --job=59722592906
+```
 
 В терминале отобразятся все шаги workflow.
 Для просмотра подробных логов каждого шага используется флаг `--log`:
-`gh run view --log --job=59722592906`
+```bash
+gh run view --log --job=59722592906
+```
 
 
 ## Просмотр выполнения конкретного workflow в реальном времени
 
 Чтобы следить за выполнением GitHub Action в реальном времени, можно использовать команду:
-`gh run watch $(gh run list -L 1 --json databaseId -q ".[0].databaseId")`
+```bash
+gh run watch $(gh run list -L 1 --json databaseId -q ".[0].databaseId")
+```
 
 ![[Pasted image 20260107205817.png | 700]]
 
