@@ -12,6 +12,7 @@ rating:
 published: 2026-01-08
 symlink:
 symlinkchapter: DevOps
+Language: ru
 ---
   
 ![[Pasted image 20260108204819.png]]
