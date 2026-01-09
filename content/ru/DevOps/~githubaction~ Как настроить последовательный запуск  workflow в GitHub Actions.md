@@ -15,7 +15,7 @@ published: 2026-01-09
 symlink:
 symlinkchapter: DevOps
 ---
-![[ChatGPT Image Jan 9, 2026, 05_43_52 PM.png]]
+![[githubaction-sequential.png]]
 
 При работе с GitHub Actions часто возникает ситуация, когда в репозитории настроено несколько workflow, и важно, чтобы они выполнялись в определённом порядке.
 
