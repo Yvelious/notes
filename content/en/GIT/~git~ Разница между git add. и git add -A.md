@@ -2,7 +2,8 @@
 create: 2025-04-24
 idnote: vi8qp6xIYs
 vault: dev
-title: Difference between "git add" . and "git add -A"
+title: Разница между git add. и git add -A
+title_en: Difference between "git add" . and "git add -A"
 path:
 tags:
   - git
@@ -12,7 +13,7 @@ rating:
 symlink:
 symlinkchapter: GIT
 published: 2025-04-24
-Language: en
+Language: ru
 ---
 ![[Pasted image 20221104172417.png]]
 
@@ -20,7 +21,7 @@ Language: en
 
 - Adds **only changes in the current directory and below**.
 - **Does not capture files higher in the hierarchy** if you are in a subfolder.
-- **Does not track remote files** above the level where the command is invoked.
+- **Does not track deleted files** above the level where the command is invoked.
 
 ```bash
 cd src/utils
@@ -40,4 +41,4 @@ git add -A
 **Will add changes across the entire project, including deleted files.**
 
 #### **In summary**
-The commands `git add -A` and `git add .` do the same thing, indexing new, deleted, and modified files, but the difference lies in their scope of responsibility. The command `git add .` works only within the current directory and nested folders, whereas `git add -A` encompasses the entire repository.
+The commands `git add -A` and `git add .` do the same thing, indexing new, deleted, and modified files, but the difference lies in the scope of responsibility. The command `git add .` works only within the current directory and nested folders, while the command `git add -A` covers the entire repository.

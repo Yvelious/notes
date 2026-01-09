@@ -19,19 +19,19 @@ Language: de
 
 ## `git add .`
 
-- Fügt **nur die Änderungen im aktuellen Verzeichnis und darunter** hinzu.
+- Fügt **nur Änderungen im aktuellen Verzeichnis und darunter** hinzu.
 - **Erfasst keine Dateien höher in der Hierarchie**, wenn du dich in einem Unterordner befindest.
-- **Verfolgt keine entfernten Dateien** über dem Level, auf dem der Befehl aufgerufen wurde.
+- **Verfolgt keine entfernten Dateien** über dem Level, auf dem der Befehl ausgeführt wird.
 
 ```bash
 cd src/utils
 git add .
 ```
-**Fügt nur Änderungen in `src/utils/` und dessen Unterordnern hinzu.**
+**Fügt nur Änderungen in `src/utils/` und deren Unterordnern hinzu.**
 
 ## `git add -A`
 
-- Fügt **alle Änderungen im gesamten Repository** hinzu: neue, geänderte, gelöschte Dateien.
+- Fügt **alle Änderungen im gesamten Repository** hinzu: neue, geänderte und gelöschte Dateien.
 - Funktioniert **unabhängig davon, in welchem Ordner du dich befindest**.
 
 ```bash
@@ -41,4 +41,4 @@ git add -A
 **Fügt Änderungen im gesamten Projekt hinzu, einschließlich gelöschter Dateien.**
 
 #### **Zusammenfassung**
-Die Befehle `git add -A` und `git add .` tun im Grunde dasselbe, indem sie neue, gelöschte und geänderte Dateien indizieren, aber der Unterschied liegt im Verantwortungsbereich. Der Befehl `git add .` funktioniert nur innerhalb des aktuellen Verzeichnisses und seiner Unterordner, während der Befehl `git add -A` das gesamte Repository abdeckt.
+Die Befehle `git add -A` und `git add .` tun im Wesentlichen dasselbe, indem sie neue, gelöschte und geänderte Dateien indizieren, aber der Unterschied liegt im Verantwortungsbereich. Der Befehl `git add .` funktioniert nur innerhalb des aktuellen Verzeichnisses und der darin enthaltenen Unterordner, während der Befehl `git add -A` das gesamte Repository abdeckt.
