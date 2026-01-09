@@ -17,7 +17,7 @@ Language: en
 
 ![[Pasted image 20260108204819.png]]
 
-Logging into GitHub through the web interface every time to track the execution of GitHub Actions is not very convenient—especially if you frequently push and want to see the CI results immediately.
+Accessing GitHub through the web interface every time to track the execution of GitHub Actions is not very convenient—especially if you frequently push and want to see the CI results immediately.
 
 It is much more convenient to monitor the execution of GitHub Actions directly from the terminal without opening a browser. Fortunately, GitHub provides an official tool for this—**GitHub CLI**.
 
@@ -68,20 +68,20 @@ It will show the latest runs with information about:
 ## Filtering and Formatting Output
 
 By default, the `gh run list` command outputs the list of runs in a standard tabular format.  
-However, often you need to see only the latest runs and only the necessary fields.
+However, often you only need to see the latest runs and only the necessary fields.
 
-### Output the Last N Runs
+### Outputting the Last N Runs
 
-If, for example, you need to output **the last 5 runs**, you can use the `-L` flag:
+If, for example, you want to output **the last 5 runs**, you can use the `-L` flag:
 
 ```bash
 gh run list -L 5
 ```
 
 
-### Output Only Required Fields
+### Outputting Only Necessary Fields
 
-GitHub CLI allows you to get data in JSON format and format the output using the built-in JMESPath query (`-q`).
+GitHub CLI allows you to retrieve data in JSON format and format the output using the built-in JMESPath query (`-q`).
 
 For example, to output **the last 5 runs** with the fields:
 
@@ -104,17 +104,19 @@ completed   | success | deploy         | #59722592810
 completed   | failure | lint           | #59722592744
 ```
 
+
 ### Available Fields for Output
 
 In `--json`, you can specify any available fields. The most useful ones are:
-- `databaseId` — unique run ID
+- `databaseId` — unique ID of the run
 - `status` — current status: `queued`, `in_progress`, `completed`
 - `conclusion` — execution result: `success`, `failure`, `cancelled` (only if `completed`)
 - `workflowName` — name of the workflow
-- `branch` — branch from which the workflow was started
+- `branch` — branch from which the workflow was triggered
 - `displayTitle` — displayed title of the run
+    
 
-Thus, using `--json` and `-q`, you can flexibly customize the output and get exactly the information you need for monitoring GitHub Actions directly from the terminal.
+Thus, using `--json` and `-q`, you can flexibly configure the output and get exactly the information you need for monitoring GitHub Actions directly from the terminal.
 
 ### Filtering by Status
 
@@ -123,7 +125,7 @@ You can output only those workflows that are currently running:
 gh run list --status in_progress
 ```
 
-Similarly, you can view only those waiting in the queue:
+Similarly, you can view only those that are queued:
 ```bash
 gh run list --status queued
 ```
@@ -156,13 +158,13 @@ gh run watch $(gh run list -L 1 --json databaseId -q ".[0].databaseId")
 This command:
 - takes the last executed workflow
 - connects to it
-- shows the progress and logs in real time
+- shows the execution progress and logs in real time
 
 ## Automating Monitoring of GitHub Actions
 
-The problem is that GitHub CLI does not stream events in real time. It works via polling—meaning it shows the current state at the time of the request.
+The problem is that GitHub CLI does not stream events in real time. It works through polling—meaning it shows the current state at the time of the request.
 `gh run watch` simply polls the GitHub API at a certain interval and updates the output. This is not push notifications, but periodic status checks.
-This command is convenient when we are monitoring a specific workflow that has been started. But if we need to monitor the status of 5 or 10 workflows that are running, in progress, or in the queue, then this command is not particularly suitable for our goals. For this, we can use the `watch` utility, which allows you to run any command every N seconds and update the output in the terminal.
+This command is convenient when monitoring a specific workflow run. But if we need to monitor the status of 5 or 10 workflows that are running, in progress, or queued, then this command is not particularly suitable for our goals. For this, we can use the `watch` utility, which allows you to run any command every N seconds and update the output in the terminal.
 
 ## Using the watch Utility for Automatic Updates of GitHub Actions List
 
@@ -181,16 +183,16 @@ After that, you can run, for example:
 - shows the 5 latest GitHub Action runs in the terminal
 - automatically updates the screen
 
-The `-L 5` flag means that we are interested in the last 5 workflows.
+The `-L 5` flag indicates that we are interested in the 5 latest workflows.
 As a result, we get automatic updates of the GitHub Actions list directly in the terminal.
 
 ## In Summary
 
-**By using GitHub CLI and standard console utilities, you can:**
+**Using GitHub CLI and standard console utilities, you can:**
 - view the list of GitHub Actions runs
 - filter by status
 - view logs
 - monitor execution in real time
 - organize automatic monitoring via `watch`
     
-**This allows you to work with CI much faster and more conveniently without constantly switching to the browser.**
+**This allows you to work with CI much faster and more conveniently, without constantly switching to the browser.**

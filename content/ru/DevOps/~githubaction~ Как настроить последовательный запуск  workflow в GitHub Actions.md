@@ -10,7 +10,7 @@ tags:
   - githubaction
 status:
 rating:
-language: ru
+Language: ru
 published: 2026-01-09
 symlink:
 symlinkchapter: DevOps
