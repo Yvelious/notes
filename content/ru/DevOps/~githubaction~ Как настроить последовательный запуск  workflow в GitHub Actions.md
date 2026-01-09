@@ -57,7 +57,6 @@ on:
 
 В GitHub Actions есть специальное событие `workflow_run`, которое позволяет запускать один workflow после завершения другого.
 
-
 ### Первый workflow — `build.yml`
 
 ```yaml
