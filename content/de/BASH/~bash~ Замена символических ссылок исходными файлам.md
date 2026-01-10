@@ -2,7 +2,7 @@
 create: 2025-01-16
 idnote: vz2hZnrhGV
 vault: dev
-title: Ersetzen von symbolischen Links durch die ursprünglichen Dateien
+title: Ersetzen von symbolischen Links durch die Originaldateien
 path:
 tags:
   - bash
@@ -12,15 +12,15 @@ symlinkchapter: BASH
 published: 2024-05-05
 Language: de
 ---
-Ziel ist es, symbolische Links durch die tatsächlichen Dateien zu ersetzen. Wann ist das notwendig? Wenn man symbolische Links loswerden möchte, indem man sie durch die ursprünglichen Dateien ersetzt, auf die sie verweisen. Dies kann nötig sein, wenn wir unsere Dateien auf ein anderes Medium oder an einen anderen Ort verschieben.
+Ziel ist es, symbolische Links durch die tatsächlichen Dateien zu ersetzen. Wann ist das notwendig? Wenn man die symbolischen Links loswerden möchte, indem man sie durch die Originaldateien ersetzt, auf die sie verweisen. Dies kann nötig sein, wenn wir unsere Dateien auf ein anderes Medium oder an einen anderen Ort verschieben.
 
-### Befehl, der dies tut:
+### Der Befehl, der dies tut:
 
 ```bash
 find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
 ```
 
-### Aufschlüsselung:
+### Erklärung:
 
 1. **`find . -type l`:**
     
@@ -33,8 +33,8 @@ find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
     - Gibt den absoluten Pfad zur Datei zurück, auf die der symbolische Link `{}` verweist.
 4. **`cp --remove-destination $(readlink -f {}) {}`:**
     
-    - Kopiert die tatsächliche Datei, auf die der symbolische Link verweist (`$(readlink -f {})`), zurück an die Stelle, an der sich der symbolische Link befindet (`{}`).
-    - Die Option `--remove-destination` entfernt die Ziel-Datei vor dem Kopieren. Dies ist wichtig, um den symbolischen Link durch die tatsächliche Datei zu ersetzen (ansonsten kann `cp` nicht über den Link schreiben).
+    - Kopiert die tatsächliche Datei, auf die der symbolische Link verweist (`$(readlink -f {})`), zurück an die gleiche Position, an der sich der symbolische Link befindet (`{}`).
+    - Die Option `--remove-destination` entfernt die Zieldatei vor dem Kopieren. Dies ist wichtig, um den symbolischen Link durch die tatsächliche Datei zu ersetzen (ansonsten kann `cp` nicht über den Link schreiben).
 
 ### Was passiert am Ende:
 
@@ -56,9 +56,9 @@ find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
     find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
     ```
     
-    wird die Struktur:
+    wird die Struktur zu:
     
     ```plaintext
     ./file.txt
-    ./link (das ist jetzt keine Verknüpfung mehr, sondern eine Kopie von file.txt)
+    ./link (dies ist kein Link mehr, sondern eine Kopie von file.txt)
     ```

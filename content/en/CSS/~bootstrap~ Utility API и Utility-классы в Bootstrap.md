@@ -21,9 +21,9 @@ Language: en
 **Utility API** is a Sass-based tool for creating utility classes.  
 **Utility classes** are small, single-purpose classes that can be used to quickly apply styles to HTML elements without the need to write custom CSS.
 
-Bootstrap has `bootstrap/scss/utilities/api` and `bootstrap/scss/utilities`, which allow you to create your own utilities (higher-order classes) for rapid prototyping and responsive design. In principle, it is similar to **tailwind**, but with fewer classes and a simpler system.
+Bootstrap has `bootstrap/scss/utilities/api` and `bootstrap/scss/utilities`, which allow you to create your own utilities (higher-order classes) for rapid prototyping and responsive design. It is similar in principle to **Tailwind**, but with fewer classes and a simpler system.
 
-`$utilities` is an array-like object in SASS that contains settings for generating utility classes. It holds a list of all the utilities (classes) that will be generated in the final CSS file and their configurations. The Utilities API generates classes based on the data from `$utilities`.
+`$utilities` is an array-like object in SASS that contains settings for generating utility classes. It includes a list of all utilities (classes) that will be generated in the final CSS file and their settings. The Utilities API generates classes based on the data from `$utilities`.
 
 In `_utilities.scss`, there is an array-like object `$utilities` with a set of properties and data for generating utility classes.
 
@@ -44,37 +44,37 @@ $utilities: (
 );
 ```
 
-The generated utility classes have a higher priority than the basic bootstrap classes. From the names of the utility classes, it is usually clear what this class does. For example, `.text-center` centers the text, `.m-3` adds margins, `.d-flex` makes an element a flex container, etc.
+The generated utility classes have a higher priority than the base Bootstrap classes. The names of utility classes usually make it clear what the class does. For example, `.text-center` centers text, `.m-3` adds margins, `.d-flex` makes an element a flex container, etc.
 
 The advantage of using utility classes is that they allow for quick creation of responsive designs without the need to write a lot of custom CSS code.
 
-**Basic principles of such utility classes:**
+**Key principles of such utility classes:**
 1. Atomic independent classes
 2. Can be combined with each other
-3. Have a higher priority than the base Bootstrap classes
+3. Have higher priority than base Bootstrap classes
 
 **Disadvantages:**
-The size of the final CSS file increases, as many classes that may not be used in the project are generated. Customization and refactoring can also be more challenging, as you have to work with a large number of classes. For example, if you need to change the text color, you would have to find and replace all `.text-*` classes used in the project, instead of changing it once in the CSS file. Additionally, another drawback is that the multitude of classes for each element can complicate the HTML markup.
+The size of the final CSS file increases since many classes are generated that may not be used in the project. Additionally, customization and refactoring can be more challenging, as you have to work with a large number of classes. For example, if you need to change the text color, you will have to find and replace all `.text-*` classes used in the project, rather than changing it once in the CSS file. Another downside is that the plethora of classes for each element can complicate the HTML markup.
 
 ## Properties for Each Utility
 
-|Option|Type|Description|
-|---|---|---|
-|`property`|**Required**|Property name, which can be a string or an array of strings (e.g., horizontal padding or margins).|
-|`values`|**Required**|List of values or a map, if you do not want the class name to match the value. If `null` is used as a key in the map, it will not be compiled.|
-|`class`|Optional|Variable for class name, if you do not want it to match the property. If the `class` key is not specified, and the `property` key is an array of strings, the class name will be the first element of the `property` array.|
-|`state`|Optional|List of pseudo-class variations, such as `:hover` or `:focus`, to be generated for the utility. Default is none.|
-|`responsive`|Optional|Boolean indicating whether to generate responsive classes. Default is `false`.|
-|`rfs`|Optional|Boolean value for enabling fluid rescaling. See page on [RFS](https://getbootstrap.com/docs/5.0/getting-started/rfs/) for more details. Default is `false`.|
-|`print`|Optional|Boolean indicating whether to generate print classes. Default is `false`.|
-|`rtl`|Optional|Boolean indicating whether the utility should be supported in RTL. Default is `true`.|
+| Option     | Type        | Description                                                                                     |
+|------------|-------------|-------------------------------------------------------------------------------------------------|
+| `property` | **Required**| The name of the property, which can be a string or an array of strings (e.g., horizontal paddings or margins). |
+| `values`   | **Required**| A list of values or a map if you do not want the class name to match the value. If `null` is used as the map key, it will not compile. |
+| `class`    | Optional    | A variable for the class name if you do not want it to match the property. If the `class` key is not specified and the `property` key is an array of strings, the class name will be the first element of the `property` array. |
+| `state`    | Optional    | A list of pseudoclass variants, such as `:hover` or `:focus`, that need to be generated for the utility. Default value is none. |
+| `responsive`| Optional   | A boolean indicating whether to generate responsive classes. Default is `false`.               |
+| `rfs`      | Optional    | A boolean for enabling fluid rescaling. See more on the [RFS](https://getbootstrap.com/docs/5.0/getting-started/rfs/) page. Default is `false`. |
+| `print`    | Optional    | A boolean indicating whether to generate classes for printing. Default is `false`.             |
+| `rtl`      | Optional    | A boolean indicating whether the utility should be supported in RTL. Default is `true`.        |
 
 **N.B.**  
-All utility classes generated by the API include `!important` to ensure they override components and modifier classes by design. You can toggle this setting globally using the variable `$enable-important-utilities` (default is `true`).
+All utility classes generated by the API include `!important` to ensure they override components and modifier classes as intended. You can toggle this setting globally using the variable `$enable-important-utilities` (default is `true`).
 
-## Utilities Can Be Extended.
+## Utilities Can Be Extended
 
-For this, we use the Sass function `map-merge()`, which allows merging two maps into one.
+To do this, we use the Sass function `map-merge()`, which allows merging two maps into one.
 
 ```scss
 $utilities: map-merge(
@@ -92,7 +92,7 @@ $utilities: map-merge(
 );
 ```
 
-Order matters, first you need to declare `$utilities`, then extend it, and after that initialize `utilities/api`.
+The order is important; first, you need to declare `$utilities`, then extend it, and after that initialize `utilities/api`.
 
 ```scss
 @import "bootstrap/scss/utilities";  
@@ -115,10 +115,11 @@ $utilities: map-merge(
 @import "bootstrap/scss/utilities/api";
 ```
 
-## Existing Utilities Can Be Modified.
-For this, we also use `map-merge()`, but with the existing utility, and `map-get()` to retrieve the required properties.
+## Modifying Existing Utilities
 
-For example, to add `10%` to the `width` utility.
+To do this, we also use `map-merge()`, but with an existing utility, and `map-get()` to retrieve the necessary properties.
+
+For example, adding `10%` to the `width` utility.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -141,16 +142,16 @@ $utilities: map-merge(
 );
 ```
 
-## Add Responsive to Existing Utility Class.
+## Adding Responsive to Existing Utility Classes
 
-In **Bootstrap 5**, all utilities can be "customized" for breakpoints.
+In **Bootstrap 5**, all utilities can be "tuned" to breakpoints.
 
 ```
 {property}{sides?}-{breakpoint?}-{value}
 ```
 
 **For example:**  
- `d-flex, d-sm-flex, d-md-flex, d-lg-flex`
+`d-flex, d-sm-flex, d-md-flex, d-lg-flex`
 
 ```html
 <div class="d-lg-flex">
@@ -158,11 +159,11 @@ In **Bootstrap 5**, all utilities can be "customized" for breakpoints.
 </div>
 ```
 
-However, Bootstrap 5 does not support responsive breakpoints "out of the box" for all **utilities**. 
-- For **margin, padding, display, flex, grid, text, color** — yes, they work with `-sm-`, `-md-`, etc.
-- But for **height/width (`h-*`, `w-*`)** responsive versions **are not available by default**. Therefore, `h-md-100` will not work.
-- 
-But there's a way to add responsive support to existing utilities, such as `height` and `width`, by adding the property `responsive: true` in the utility definition in `$utilities`.
+However, Bootstrap 5 does not support all **utilities** with responsive breakpoints "out of the box".  
+- For **margin, padding, display, flex, grid, text, color** — yes, `-sm-`, `-md-`, etc. work.
+- But for **height/width (`h-*`, `w-*`)**, responsive versions are **not available by default**. Therefore, `h-md-100` will not work.
+
+But there is a possibility to add support for responsive to existing utilities, for example, to `height` and `width`. By adding the property `responsive: true` in the utility description in `$utilities`.
 
 ```scss
 $utilities: map-merge(  
@@ -183,7 +184,7 @@ $utilities: map-merge(
 );
 ```
 
-Alternatively, you can precisely rewrite a specific utility class, for example, `border`.
+Alternatively, you can also rewrite a specific utility class more precisely, for example, `border`.
 
 ```scss
 $utilities: map-merge(
@@ -193,11 +194,12 @@ $utilities: map-merge(
       ( responsive: true ),
     ),
   )
-)
+);
 ```
 
 ## Renaming Utility Classes
-This is also possible if you don’t like the default class name. This is controlled by the `class` property.
+
+This is also possible if you do not like the standard class name. This is handled by the `class` property.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -214,8 +216,9 @@ $utilities: map-merge(
 );
 ```
 
-## Remove Specific Utility Classes from CSS Generation
-You can remove any utilities by setting the group key to `null`. For example, here's how to remove the width utility.
+## Removing Specific Utility Classes from CSS Generation
+
+You can remove any utilities by setting the group key to `null`. For example, below is an example of how to remove the width utility.
 
 ```scss
 @import "bootstrap/scss/functions";
