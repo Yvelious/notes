@@ -17,15 +17,15 @@ symlinkchapter: DevOps
 ---
 ![[githubaction-sequential.png]]
 
-When working with GitHub Actions, it is often the case that multiple workflows are set up in a repository, and it is important that they execute in a specific order.
+When working with GitHub Actions, it's common to encounter a situation where multiple workflows are configured in a repository, and it's important for them to execute in a specific order.
 
 For example:
 - first, `build` should run
 - and only after its successful completion should `deploy` be triggered
 
-However, by default, if multiple workflows are subscribed to the same event (e.g., `push` to the `main` branch), they run **in parallel**. This can lead to issues if the second workflow depends on the result of the first.
+However, by default, if multiple workflows are subscribed to the same event (for example, `push` to the `main` branch), they are executed **in parallel**. This can lead to problems if the second workflow depends on the result of the first.
 
-Let's explore how to properly configure **sequential workflow execution in GitHub Actions**.
+Let's discuss how to properly configure **sequential workflow execution in GitHub Actions**.
 
 ## The Problem of Parallel Execution
 
@@ -34,7 +34,7 @@ Suppose we have two workflows:
 - `build.yml`
 - `deploy.yml`
 
-Both are configured to trigger on the `push` event to the `main` branch:
+Both are configured for the `push` event to the `main` branch:
 
 ```yaml
 on:
@@ -42,7 +42,7 @@ on:
     branches: [ main ]
 ```
 
-With each `git push`, they will be triggered simultaneously.  
+With each `git push`, they will run simultaneously.  
 If `deploy` depends on the result of `build`, this can lead to errors:
 
 - deployment may start before the build is complete
@@ -54,7 +54,7 @@ Therefore, the order of execution needs to be explicitly defined.
 
 ## Sequential Execution via `workflow_run`
 
-GitHub Actions has a special event called `workflow_run`, which allows one workflow to be triggered after another has completed.
+In GitHub Actions, there is a special event called `workflow_run` that allows one workflow to run after another has completed.
 
 ### First Workflow — `build.yml`
 
@@ -69,7 +69,7 @@ jobs:
   ...
 ```
 
-This workflow runs on every push to `main` and executes jobs, such as building and testing.
+This workflow is triggered on every push to `main` and performs jobs such as building and testing.
 
 ### Second Workflow — `deploy.yml`
 
@@ -88,7 +88,7 @@ jobs:
     ...
 ```
 
-This workflow runs **only after the completion** of the `Build` workflow, with the condition that `Build` was successful.
+This workflow runs **only after the `Build` workflow has completed**, and it includes a condition that `Build` must have completed successfully.
 
 ## How It Works
 
@@ -99,7 +99,7 @@ Now the process looks like this:
 3. After it completes, GitHub automatically triggers `Deploy`
 4. If `Build` fails, `Deploy` will not run
 
-Thus, a strict sequence is achieved:
+This achieves a strict sequence:
 
 ```
 push → build → deploy
@@ -107,16 +107,16 @@ push → build → deploy
 
 ## When to Use This Approach
 
-Sequential workflow execution is useful when:
+Sequential workflow execution is useful if:
 
 - deployment depends on the build
 - tests must complete before publishing
 - there are database migrations
-- multiple stages of the pipeline are used
+- multiple stages in the pipeline are used
 
 ## In Summary
 
-If a project uses multiple GitHub Actions workflows and there are logical dependencies between them, they must be executed sequentially.  
+If a project uses multiple GitHub Actions workflows and there are logical dependencies between them, they need to be executed sequentially.  
 The best and official way to do this is to use the `workflow_run` event.
 
 This allows you to:
