@@ -9,6 +9,7 @@ status:
 rating:
 symlink:
 symlinkchapter: TEST2
+Language: ru
 ---
 
 ![[Pasted image 20260110135248.png]]
