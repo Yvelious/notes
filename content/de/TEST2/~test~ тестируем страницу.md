@@ -14,6 +14,6 @@ Language: de
 
 ![[Pasted image 20260110135248.png]]
 
-![[Pasted image 20260110165755.png]]
 
-Wir testen die Seite, wie sie in der öffentlichen Darstellung aussehen wird. Übersetze mich in das Markdown-Format1111sdsdsdsd4442222222222dffdfdf454545
+
+Wir testen die Seite, wie sie im öffentlichen Zugriff aussehen wird. Übersetze mich ins Markdown-Format...

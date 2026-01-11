@@ -29,8 +29,8 @@ symlinkchapter: DevOps
 
 ## Проблема параллельного запуска
 
-**Допустим, у нас есть два workflow:**
-1
+Допустим, у нас есть два workflow:
+
 - `build.yml`
 - `deploy.yml`
 
