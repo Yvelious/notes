@@ -14,7 +14,7 @@ symlinkchapter: CSS
 Language: ru
 ---
 
-====
+========
 ![[Pasted image 20250923224005.png]]
 ## Что такое `:has()` в CSS?
 
