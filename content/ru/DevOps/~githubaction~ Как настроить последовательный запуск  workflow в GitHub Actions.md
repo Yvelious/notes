@@ -8,6 +8,7 @@ tags:
   - ci
   - git
   - githubaction
+  - devops
 status:
 rating:
 Language: ru
