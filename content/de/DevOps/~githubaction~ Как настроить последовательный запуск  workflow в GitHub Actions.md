@@ -2,7 +2,7 @@
 create: 2026-01-09
 idnote: kAqzmvKP1O
 vault: dev
-title: So richten Sie die aufeinanderfolgende Ausführung von Workflows in GitHub Actions ein
+title: So richten Sie einen sequenziellen Ablauf von Workflows in GitHub Actions ein
 path:
 tags:
   - ci
@@ -18,15 +18,15 @@ symlinkchapter: DevOps
 ---
 ![[githubaction-sequential.png]]
 
-Bei der Arbeit mit GitHub Actions gibt es oft Situationen, in denen mehrere Workflows im Repository konfiguriert sind, und es wichtig ist, dass sie in einer bestimmten Reihenfolge ausgeführt werden.
+Bei der Arbeit mit GitHub Actions kommt häufig die Situation vor, dass in einem Repository mehrere Workflows eingerichtet sind und es wichtig ist, dass sie in einer bestimmten Reihenfolge ausgeführt werden.
 
-Beispielsweise:
-- Zuerst muss `build` ausgeführt werden
+Zum Beispiel:
+- zuerst muss `build` ausgeführt werden
 - und erst nach dessen erfolgreichem Abschluss sollte `deploy` gestartet werden
 
-Standardmäßig, wenn mehrere Workflows auf dasselbe Ereignis (z. B. `push` in den Branch `main`) hören, werden sie **parallel** ausgeführt. Dies kann zu Problemen führen, wenn der zweite Workflow vom Ergebnis des ersten abhängt.
+Standardmäßig, wenn mehrere Workflows auf dasselbe Ereignis (z.B. `push` in den Branch `main`) hören, werden sie **parallel** gestartet. Das kann zu Problemen führen, wenn der zweite Workflow vom Ergebnis des ersten abhängt.
 
-Schauen wir uns an, wie man die **aufeinanderfolgende Ausführung von Workflows in GitHub Actions** richtig konfiguriert.
+Lassen Sie uns ansehen, wie man den **sequenziellen Ablauf von Workflows in GitHub Actions** richtig einrichtet.
 
 ## Problem der parallelen Ausführung
 
@@ -34,7 +34,7 @@ Schauen wir uns an, wie man die **aufeinanderfolgende Ausführung von Workflows 
 - `build.yml`
 - `deploy.yml`
 
-Beide sind auf das Ereignis `push` in den Branch `main` konfiguriert:
+Beide sind auf das Ereignis `push` im Branch `main` konfiguriert:
 
 ```
 on:
@@ -44,19 +44,18 @@ on:
 ```
 
 Bei jedem `git push` werden sie gleichzeitig gestartet.  
-Wenn `deploy` von dem Ergebnis von `build` abhängt, kann dies zu Fehlern führen:
+Wenn `deploy` vom Ergebnis `build` abhängt, kann dies zu Fehlern führen:
 
-- Das Deployment beginnt vor dem Abschluss des Builds
-- Artefakte sind möglicherweise noch nicht bereit
-- Tests könnten noch ausgeführt werden
-- Die Umgebung ist möglicherweise nicht bereit
+- Der Deploy beginnt, bevor der Build abgeschlossen ist
+- Die Artefakte sind möglicherweise nicht bereit
+- Tests könnten noch durchgeführt werden
+- Die Umgebung könnte nicht bereit sein
 
-Deshalb muss die Ausführungsreihenfolge ausdrücklich festgelegt werden.
+Daher muss die Reihenfolge der Ausführung ausdrücklich festgelegt werden.
 
-## Aufeinanderfolgende Ausführung über `workflow_run`
+## Sequenzieller Ablauf über `workflow_run`
 
-In GitHub Actions gibt es ein spezielles Ereignis `workflow_run`, das es ermöglicht, einen Workflow nach dem Abschluss eines anderen zu starten.
-
+In GitHub Actions gibt es ein spezielles Ereignis `workflow_run`, das es ermöglicht, einen Workflow nach dem Abschluss eines anderen Workflow auszuführen.
 ### Erster Workflow — `build.yml`
 
 ```yaml
@@ -71,7 +70,7 @@ jobs:
 
 ```
 
-Dieser Workflow wird bei jedem Push in `main` gestartet und führt Jobs aus, z. B. Build und Tests.
+Dieser Workflow wird bei jedem Push in `main` gestartet und führt Jobs aus, z.B. Build und Test.
 
 ### Zweiter Workflow — `deploy.yml`
 
@@ -90,38 +89,38 @@ jobs:
     ...
 ```
 
-Dieser Workflow wird **nur nach dem Abschluss** des Workflows `Build` gestartet. Zudem mit der Bedingung, dass `Build` erfolgreich abgeschlossen wurde.
+Dieser Workflow wird **nur nach Abschluss** des Workflows `Build` gestartet. Außerdem mit der Bedingung, dass `Build` erfolgreich abgeschlossen wurde.
 
 ## Wie es funktioniert
 
-Jetzt sieht der Prozess folgendermaßen aus:
+Jetzt sieht der Prozess so aus:
 
 1. Wir führen `git push` in den Branch `main` aus
 2. Der Workflow `Build` wird gestartet
 3. Nach dessen Abschluss startet GitHub automatisch `Deploy`
-4. Wenn `Build` mit einem Fehler abgeschlossen wird, wird `Deploy` nicht gestartet
+4. Wenn `Build` mit einem Fehler endet, wird `Deploy` nicht gestartet
 
-So wird eine strikte Reihenfolge erreicht:
+Somit wird eine strikte Reihenfolge erreicht:
 
 ```
 push → build → deploy
 ```
 
-## Wann dieser Ansatz sinnvoll ist
+## Wann man diesen Ansatz verwenden sollte
 
-Die aufeinanderfolgende Ausführung von Workflows ist nützlich, wenn:
+Der sequenzielle Ablauf von Workflows ist nützlich, wenn:
 
-- das Deployment von dem Build abhängt
+- der Deploy von der Build abhängt
 - Tests vor der Veröffentlichung abgeschlossen sein müssen
-- Datenbankmigrationen vorhanden sind
+- Datenbankmigrationen durchgeführt werden
 - mehrere Phasen im Pipeline verwendet werden
 
-## Zusammenfassung
+## Zusammenfassend
 
-Wenn in einem Projekt mehrere GitHub Actions Workflows verwendet werden und zwischen ihnen eine logische Abhängigkeit besteht, sollten sie nacheinander ausgeführt werden.  
+Wenn in einem Projekt mehrere GitHub Actions Workflows verwendet werden und zwischen ihnen eine logische Abhängigkeit besteht, sollten sie nacheinander ausgeführt werden.
 Der beste und offizielle Weg, dies zu tun, ist die Verwendung des Ereignisses `workflow_run`.
 
-Dies ermöglicht:
+Das ermöglicht:
 - die Gewährleistung der Ausführungsreihenfolge
-- den Schutz der Produktion vor fehlerhaften Deployments
+- den Schutz der Produktionsumgebung vor fehlerhaften Deployments
 - den Aufbau einer vollständigen CI/CD-Pipeline
