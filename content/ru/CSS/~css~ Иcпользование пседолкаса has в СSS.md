@@ -2,7 +2,7 @@
 create: 2025-09-23
 idnote: Dv6OPXUoDu
 vault: dev
-title: Иcпользования пседолкаса has в СSS
+title: Иcпользование пседолкаса has в СSS
 path:
 tags:
   - css
@@ -14,6 +14,7 @@ symlinkchapter: CSS
 Language: ru
 ---
 
+====
 ![[Pasted image 20250923224005.png]]
 ## Что такое `:has()` в CSS?
 
