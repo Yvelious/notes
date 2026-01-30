@@ -112,6 +112,10 @@ function createFolderNode(
   li.dataset.path = folderPath
   folderContainer.dataset.folderpath = folderPath
 
+  if (currentSlug === folderPath) {
+    folderContainer.classList.add("active")
+  }
+
   if (opts.folderClickBehavior === "link") {
     // Replace button with link for link behavior
     const button = titleContainer.querySelector(".folder-button") as HTMLElement
