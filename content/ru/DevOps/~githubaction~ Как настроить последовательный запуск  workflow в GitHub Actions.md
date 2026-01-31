@@ -125,3 +125,14 @@ push → build → deploy
 - защитить продакшн от некорректных деплоев
 - построить полноценный CI/CD пайплайн
 
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## References
+> ------------
+> 
+> 
+> ## Zero-links
+> ----
+> [[00 GITHUBACTION]]

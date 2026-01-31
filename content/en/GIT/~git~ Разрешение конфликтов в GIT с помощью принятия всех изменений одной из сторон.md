@@ -11,7 +11,7 @@ create: 2025-03-21
 Language: en
 ---
 
-When, for example, a conflict arises between two files, and it makes no sense to manually resolve the conflict line by line, you can completely accept the changes from one side. The following commands are used for this:
+When, for example, a conflict arises between two files, and there is no point in manually resolving the conflict line by line, you can fully accept the changes from one side. The following commands are used for this:
 
 Accept changes from the other side
 ```bash
@@ -26,7 +26,11 @@ git add .
 ```
 
 **N.B.**
-The dot (`.`) at the end of the command means that the operation applies to all conflicting files. If you need to apply the command to a specific file, specify the path to that file instead of the dot.
+The dot (`.`) at the end of the command means that the operation is applied to all conflicting files. If you need to apply the command to a specific file, specify the path to that file instead of the dot.
+
+> [!raw-hidden]-
+> If you're already in a conflicted state, and you want to just accept _all_ of theirs:
+> If you want to do the opposite:
 
 ## Zero-links
 ------

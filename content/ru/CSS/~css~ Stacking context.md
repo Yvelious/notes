@@ -102,3 +102,22 @@ div {
 Если ваша цель не только создать **stacking context**, но еще и **оптимизация производительности**, и вы хотите подсказать браузеру создать новый compositing layer, лучше использовать `will-change: transform` или `will-change: opacity`. Это более явные "подсказки" для браузера, которые имеют меньше побочных семантических эффектов, чем `isolation`.
 
 
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> https://web.dev/learn/css/z-index хорошая статья
+> https://www.bennadel.com/blog/3371-stacking-context-is-the-key-to-understanding-the-css-z-index.htm хорошая статья
+> https://www.hackfrontend.com/docs/html-and-css/stacking-order хорошая статья
+> https://www.freecodecamp.org/news/the-css-isolation-property/
+> https://flexicajourney.com/linkedin-posts/css-isolation-stacking-context
+> https://css-tricks.com/almanac/properties/i/isolation/
+> 
+> https://codepen.io/SitePoint/pen/GJjobw пример
+> 
+> ## References
+> ------------
+> 
+> 
+> ## Zero-links
+> ----
+> [[00 СSS]]

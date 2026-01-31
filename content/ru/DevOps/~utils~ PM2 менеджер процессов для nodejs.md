@@ -62,3 +62,14 @@ PM2 обеспечивает автоматический перезапуск �
 - `pm2 save && pm2 startup` — автозапуск при старте системы.
 
 
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## References
+> ------------
+> https://pm2.keymetrics.io/
+> 
+> ## Zero-links
+> ----
+> [[00 UTILS]]

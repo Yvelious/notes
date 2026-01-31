@@ -2,7 +2,7 @@
 create: 2026-01-07
 idnote: 3In99qSMv0
 vault: dev
-title: Überwachung der Ausführungsstatus von GitHub Actions über das Terminal
+title: Anzeige des Status der GitHub Actions über das Terminal
 path:
 tags:
   - git
@@ -17,39 +17,39 @@ Language: de
 
 ![[Pasted image 20260108204819.png]]
 
-Es ist nicht sehr bequem, jedes Mal über die Web-Oberfläche von GitHub zu gehen, um den Fortschritt der GitHub Actions zu verfolgen – besonders wenn du oft pushst und sofort das Ergebnis von CI sehen möchtest.
+Jedes Mal auf GitHub über die Weboberfläche zu gehen, um den Status der GitHub Actions zu verfolgen, ist nicht besonders praktisch — insbesondere wenn man häufig Pushes macht und sofort das CI-Ergebnis sehen möchte.
 
-Es ist viel bequemer, die Ausführung von GitHub Actions direkt aus dem Terminal zu überwachen, ohne den Browser zu öffnen. Glücklicherweise bietet GitHub dafür ein offizielles Tool – **GitHub CLI**.
+Es ist viel bequemer, den Verlauf der GitHub Actions direkt aus dem Terminal heraus zu überwachen, ohne den Browser zu öffnen. Glücklicherweise bietet GitHub ein offizielles Tool dafür — **GitHub CLI**.
 
-In diesem Artikel werden wir uns ansehen, wie man den Status von GitHub Actions, Logs und den Ausführungsfortschritt direkt aus der Konsole abruft.
+In diesem Artikel werden wir besprechen, wie man den Status der GitHub Actions, die Protokolle und den Fortschritt der Ausführung direkt aus der Konsole heraus anzeigen kann.
 
 
 ## Installation von GitHub CLI
 
 Zunächst muss GitHub CLI installiert werden.
 
-Offizielle Website:  
+Offizielle Webseite:  
 [https://cli.github.com/](https://cli.github.com/)
 
-Auf macOS ist es am einfachsten, es über Homebrew zu installieren:
+Auf macOS ist es am bequemsten, es über Homebrew zu installieren:
 ```bash
 brew install gh
 ```
 
-Nach der Installation musst du dich in deinem GitHub-Konto authentifizieren:
+Nach der Installation muss man sich in seinem GitHub-Konto anmelden:
 ```bash
 gh auth login
 ```
 
-Wähle die Authentifizierungsmethode:
+Wählen Sie die Anmeldemethode aus:
 - GitHub.com
 - HTTPS
-- Anmelden mit Browser
+- Mit dem Browser anmelden
 
-Nach erfolgreicher Authentifizierung hat die CLI Zugriff auf deine Repositories und GitHub Actions.
+Nach erfolgreicher Authentifizierung hat das CLI Zugriff auf Ihre Repositories und GitHub Actions.
 
 
-## Anzeigen der Liste von GitHub Actions
+## Anzeige der Liste von GitHub Actions
 
 Um die Liste aller Ausführungen von GitHub Actions im Repository anzuzeigen, wird der Befehl verwendet:
 ```bash
@@ -58,21 +58,21 @@ gh run list
 
 ![[Pasted image 20260108200706.png]]
 
-Er zeigt die letzten Ausführungen mit Informationen zu:
+Dieser Befehl zeigt die letzten Ausführungen mit Informationen über:
 - Status (`queued`, `in_progress`, `completed`)
 - Ergebnis (`success`, `failure`, `cancelled`)
 - Workflow
 - Branch
 - usw.
 
-## Filtern und Formatieren der Ausgabe
+## Filterung und Formatierung der Ausgabe
 
-Standardmäßig gibt der Befehl `gh run list` eine list der Ausführungen im Standard-Tabellenformat aus.  
-Doch oft möchte man nur die letzten Ausführungen und nur die benötigten Felder sehen.
+Standardmäßig gibt der Befehl `gh run list` die Liste der Ausführungen im standardmäßigen Tabellenformat aus.  
+Oftmals möchte man jedoch nur die letzten Ausführungen und nur die benötigten Felder sehen.
 
 ### Ausgabe der letzten N Ausführungen
 
-Wenn du beispielsweise die **5 letzten Ausführungen** anzeigen möchtest, kannst du den Schalter `-L` verwenden:
+Wenn Sie beispielsweise die **5 letzten Ausführungen** ausgeben möchten, können Sie das Flag `-L` verwenden:
 
 ```bash
 gh run list -L 5
@@ -81,7 +81,7 @@ gh run list -L 5
 
 ### Ausgabe nur der benötigten Felder
 
-GitHub CLI ermöglicht es, Daten im JSON-Format abzurufen und die Ausgabe mit einer eingebauten JMESPath-Abfrage (`-q`) zu formatieren.
+GitHub CLI ermöglicht es, Daten im JSON-Format abzurufen und die Ausgabe mit Hilfe einer eingebauten JMESPath-Abfrage (`-q`) zu formatieren.
 
 Um beispielsweise die **5 letzten Ausführungen** mit den Feldern:
 
@@ -90,13 +90,13 @@ Um beispielsweise die **5 letzten Ausführungen** mit den Feldern:
 - `conclusion`
 - `workflowName`
 
-auszugeben, kannst du den Befehl verwenden:
+anzuzeigen, kann der folgende Befehl verwendet werden:
 
 ```bash
 gh run list -L 5 \   --json databaseId,status,conclusion,workflowName \   -q '.[] | "\(.status) | \(.conclusion // "null") | \(.workflowName) | #\(.databaseId)"'
 ```
 
-Das Ergebnis zeigt in der Konsole eine kompakte Liste in einem angenehmen Format:
+Das Ergebnis wird im Terminal in einer kompakten Liste im bequemen Format angezeigt:
 
 ```bash
 in_progress | null    | build-and-test | #59722592906 
@@ -104,49 +104,49 @@ completed   | success | deploy         | #59722592810
 completed   | failure | lint           | #59722592744
 ```
 
-### Verfügbare Felder für die Ausgabe
+### Verfügbare Felder zur Ausgabe
 
 In `--json` können beliebige verfügbare Felder angegeben werden. Die nützlichsten sind:
 - `databaseId` — eindeutige ID der Ausführung
 - `status` — aktueller Status: `queued`, `in_progress`, `completed`
-- `conclusion` — Ergebnis der Ausführung: `success`, `failure`, `cancelled` (nur wenn `completed`)
+- `conclusion` — Ausführungsergebnis: `success`, `failure`, `cancelled` (nur wenn `completed`)
 - `workflowName` — Name des Workflows
 - `branch` — Branch, von dem der Workflow gestartet wurde
-- `displayTitle` — sichtbarer Name der Ausführung
+- `displayTitle` — angezeigter Name der Ausführung
 
-So kann man mit `--json` und `-q` die Ausgabe flexibel anpassen und genau die Informationen erhalten, die zur Überwachung von GitHub Actions direkt aus dem Terminal benötigt werden.
+So kann durch die Verwendung von `--json` und `-q` die Ausgabe flexibel angepasst werden, um genau die Informationen zu erhalten, die für die Überwachung von GitHub Actions direkt aus dem Terminal erforderlich sind.
 
-### Filtern nach Status
+### Filterung nach Status
 
-Es ist möglich, nur die Workflows anzuzeigen, die derzeit ausgeführt werden:
+Man kann nur die Workflows anzeigen, die derzeit ausgeführt werden:
 ```bash
 gh run list --status in_progress
 ```
 
-Ebenso kann man nur die wartenden in der Warteschlange sehen:
+Ähnlich kann man nur die in der Warteschlange befindlichen anzeigen:
 ```bash
 gh run list --status queued
 ```
 
 
-## Anzeigen der Details einer bestimmten Ausführung
+## Anzeige der Details einer bestimmten Ausführung
 
-Jede Ausführung hat eine eigene `id`. Diese kann aus der Ausgabe des Befehls `gh run list` entnommen werden.
+Jede Ausführung hat ihre eigene `id`. Diese kann aus der Ausgabe des Befehls `gh run list` entnommen werden.
 Um zu sehen, wie eine bestimmte GitHub Action ausgeführt wurde:
 ```bash
 gh run view --job=59722592906
 ```
 
-In der Konsole werden alle Schritte des Workflows angezeigt.
-Für detaillierte Logs jedes Schrittes kann der Schalter `--log` verwendet werden:
+Im Terminal werden alle Schritte des Workflows angezeigt.
+Zur Ansicht der detaillierten Protokolle jedes Schrittes kann das Flag `--log` verwendet werden:
 ```bash
 gh run view --log --job=59722592906
 ```
 
 
-## Überwachung der Ausführung eines bestimmten Workflows in Echtzeit
+## Anzeige der Ausführung eines bestimmten Workflows in Echtzeit
 
-Um die Ausführung von GitHub Action in Echtzeit zu verfolgen, kannst du den Befehl verwenden:
+Um die Ausführung einer GitHub Action in Echtzeit zu verfolgen, kann der Befehl verwendet werden:
 ```bash
 gh run watch $(gh run list -L 1 --json databaseId -q ".[0].databaseId")
 ```
@@ -154,43 +154,55 @@ gh run watch $(gh run list -L 1 --json databaseId -q ".[0].databaseId")
 ![[Pasted image 20260107205817.png | 700]]
 
 Dieser Befehl:
-- nimmt den zuletzt gestarteten Workflow
-- verbindet sich damit
-- zeigt den Fortschritt und die Logs in Echtzeit an
+- holt sich den zuletzt gestarteten Workflow
+- verbindet sich mit ihm
+- zeigt den Fortschritt der Ausführung und die Protokolle in Echtzeit an
 
-## Automatisierung der Überwachung von Github Action
+## Automatisierung der Überwachung von Github Actions
 
-Das Problem ist, dass GitHub CLI nicht in Echtzeit streamt. Es funktioniert über Polling – das heißt, es zeigt den aktuellen Status zum Zeitpunkt der Anfrage an.
-`gh run watch` fragt die GitHub API einfach in bestimmten Intervallen ab und aktualisiert die Ausgabe. Dies sind keine Push-Benachrichtigungen, sondern eine regelmäßige Statusüberprüfung.
-Dieser Befehl ist nützlich, wenn wir einen bestimmten gestarteten Workflow überwachen. Wenn wir jedoch den Status von 5 oder 10 Workflows, die gestartet, in Bearbeitung oder in Warteschlange sind, überwachen müssen, eignet sich dieser Befehl nicht gut für unsere Zwecke. Dafür können wir das Tool `watch` verwenden, das es ermöglicht, jeden Befehl alle N Sekunden auszuführen und die Ausgabe im Terminal zu aktualisieren.
+Das Problem ist, dass GitHub CLI die Ereignisse nicht in Echtzeit streamt. Es funktioniert über Polling — dh. es zeigt den aktuellen Status zum Zeitpunkt der Anfrage an.
+`gh run watch` befragt einfach die GitHub API in bestimmten Intervallen und aktualisiert die Ausgabe. Dies sind keine Push-Benachrichtigungen, sondern eine regelmäßige Statusüberprüfung.
+Dieser Befehl ist bequem, wenn wir einen bestimmten in einem Workflow laufenden Prozess überwachen. Wenn wir jedoch den Status von 5 oder 10 Workflows überwachen möchten, die gestartet, im Prozess sind oder in der Warteschlange stehen, ist dieser Befehl nicht besonders geeignet. Dafür können wir das Tool `watch` verwenden, das es ermöglicht, jeden Befehl alle N Sekunden auszuführen und die Ausgabe im Terminal zu aktualisieren.
 
-## Verwendung des Tools watch zur automatischen Aktualisierung der Liste von GitHub Actions
+## Verwendung des Tools watch für die automatische Aktualisierung der Liste von GitHub Actions
 
 `watch` ist ein Tool, das es ermöglicht, einen Befehl alle N Sekunden auszuführen und die Ausgabe im Terminal zu aktualisieren.
-Auf macOS kann es ebenfalls über Homebrew installiert werden:
+Auf macOS kann es über Homebrew installiert werden:
 ```bash
 brew install watch
 ```
-Danach kannst du zum Beispiel Folgendes starten:
+Nach der Installation kann man beispielsweise Folgendes ausführen:
 `watch -n 5 'gh run list -L 5'`
 
 ![[Pasted image 20260108200130.png | 900]]
 
 **Dieser Befehl:**
 - führt alle 5 Sekunden `gh run list -L 5` aus
-- zeigt die 5 letzten Ausführungen von GitHub Action im Terminal an
-- aktualisiert automatisch den Bildschirm
+- zeigt die 5 letzten Ausführungen der GitHub Actions im Terminal an
+- aktualisiert den Bildschirm automatisch
 
-Der Schalter `-L 5` bedeutet, dass uns die 5 letzten Workflows interessieren.
-Dadurch erhalten wir automatische Aktualisierungen der Liste von GitHub Actions direkt im Terminal.
+Das Flag `-L 5` bedeutet, dass wir an den 5 letzten Workflows interessiert sind.
+Somit erhalten wir eine automatisch aktualisierte Liste der GitHub Actions direkt im Terminal.
 
 ## Zusammenfassung
 
-**Mit GitHub CLI und den integrierten Konsolenwerkzeugen ist es möglich:**
-- die Liste der Ausführungen von GitHub Actions anzuzeigen
-- nach Status zu filtern
-- die Logs zu überprüfen
-- die Ausführung in Echtzeit zu verfolgen
-- die automatische Überwachung über `watch` zu organisieren
+**Mit der Verwendung von GitHub CLI und den Standard-Terminal-Tools können Sie:**
+- die Liste der Ausführungen von GitHub Actions anzeigen
+- nach Status filtern
+- Protokolle einsehen
+- die Ausführung in Echtzeit verfolgen
+- die automatische Überwachung über `watch` organisieren
     
-**Das ermöglicht eine viel schnellere und bequemere Arbeit mit CI, ohne ständig im Browser wechseln zu müssen.**
+**Dies ermöglicht eine viel schnellere und bequemere Arbeit mit CI, ohne ständig in den Browser wechseln zu müssen.**
+
+
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## Referenzen
+> ------------
+> 
+> ## Zero-links
+> ----
+> [[00 GITHUBACTION]]

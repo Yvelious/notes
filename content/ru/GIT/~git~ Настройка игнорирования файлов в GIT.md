@@ -144,3 +144,25 @@ git status --ignored
 
 
 
+> [!hidden-in-public]-
+> ### Flash-cards
+> -----
+> 
+> ### Links
+> ----------
+> 
+> ### References
+> ------------
+> https://ru.hexlet.io/courses/git_base/lessons/git_gitignore/theory_unit
+> https://sergeymukhin.com/blog/nastroyka-globalnogo-fayla-gitignore#
+> https://medium.com/@yoga055/unlocking-gits-gitignore-the-gitignore-refresh-guide-0bbc51aa57be
+> 
+> ### Original
+> ----------
+> [[Игнорирование файлов в Git  Основы Git]]
+> 
+> ### Zero-links
+> ----
+> [[00 GIT]]
+> 
+

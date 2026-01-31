@@ -122,3 +122,108 @@ function handleMinLg (e) {
 
 
 
+> [!raw-hidden]-
+> Если мы хотим использовать breakpoints из CSS для работы с Media Query в JavaScript, сначала нужно извлечь их из CSS и передать в JS.
+> 
+> Можно, конечно, прописать breakpoints вручную прямо в JavaScript, но это далеко не лучший подход. Такой метод увеличивает риск ошибок и усложняет поддержку кода. Причина в том, что это приводит к дублированию: breakpoints прописываются одновременно в CSS и JS, создавая две точки входа. Если breakpoints изменятся в одном месте (например, в CSS), в другом месте (JS) их могут забыть обновить.
+> 
+> Чтобы избежать таких проблем, лучше создать единую точку входа. Это позволит синхронизировать breakpoints между CSS и JS, упрощая поддержку и снижая вероятность ошибок.
+> 
+> Наша цель передать breakpoints из CSS в JavaScript сохранив их в объекте, для дальнейшего использования в Javascript.
+> 
+> К примеру у нас есть переменная SCSS, которая содержит map breakpoints:
+> ```scss
+> $grid-breakpoints: (  
+>   xs: 0,  
+>   sm: 576px,  
+>   md: 768px,  
+>   lg: 992px,  
+>   xl: 1200px,  
+>   xxl: 1400px  
+> )
+> 
+> ```
+> 
+> Для начала нам надо их передать в псевдоэлемент `::before` в CSS, чтобы потом извлечь их в JavaScript.
+> Для этого надо перевести SCSS map в строку и передать их в свойство `content`. Для перевода в строку я использую функцию `map-to-string`.
+> 
+> ```scss
+> body {
+> 	&::before {  
+> 	    content: map-to-string($grid-breakpoints);  
+> 	    display: none;  
+> 	}
+> }
+> 
+> @function map-to-string($map) {  
+>    $result: "";  
+>    @each $key, $value in $map {  
+>      $result: "#{$result}#{$key}: #{$value}, ";  
+>    }  
+>    @return $result;  
+> }
+> ```
+> 
+> Теперь нам надо извлечь строку с данными о breakpoints из CSS и передать в JavaScript.  Для этого можно использовать `getComputedStyle` .
+> В итоге мы извлекли строку со всеми breakpoint из свойства content и сохранили в переменной `breakpoints`:
+> 
+> ```js
+> const breakpoints = getComputedStyle(document.body, ':before').getPropertyValue('content').replace(/\"/g, '').trim();
+> ```
+> 
+> Затем нам надо данную строку преобразовать в объект.
+> 
+> ```js
+> const breakpointsArray = breakpoints.split(', ').map(item => item.split(': '));  
+> const breakpointsObj Object.fromEntries(breakpointsArray);
+> ```
+> 
+> В итоге мы получаем объект `breakpointsObj` со всеми брэйкпоинтами из CSS, которые теперь мы можем использовать в JavaScript
+> 
+> 
+> Теперь мы можем использовать эти брэйкпоинты в JavaScript для работы с Media Query.
+> Для этого мы будем использовать свойство `matchMedia` и передавать в него брэйкпоинты из объекта `breakpointsObj`. 
+> 
+> Слушаем изменения брэйкпоинта и когда текущая ширина экрана соответствует заданному медиа-запрос выполняем сallback функцию. В данном случае у меня эта функция handleMinLg.
+> 
+> ```js
+> const breakpointMinLg = window.matchMedia(`(min-width: ${breakpointsObject.lg})`);  
+>   
+> handleMinLg(breakpointMinLg); // запускаем при первой загрузке страницы
+> breakpointMinLg.addEventListener('change', handleMinLg); 
+>   
+> function handleMinLg (e) { 
+>     if (e.matches) {  	// если возвращается true, значит ширина экрана соответствует заданному медиа-запросу
+> 		console.log('Ширина экрана больше или равна 992px');
+>     }  
+> }
+> ```
+> 
+> Таким образом, мы можем использовать брэйкпоинты из CSS в JavaScript, избегая дублирования кода и упрощая поддержку.
+>
+
+> [!hidden-in-public]-
+> ## Альтернативные заголовки
+> ---
+> Importing CSS Breakpoints Into JavaScript
+> Cинхронизация CSS breakpoints в Javascript
+> Using CSS Breakpoints in JavaScript Without Duplication
+> 
+> 
+> ## Promts
+> -----
+> get CSS Variables in JavaScript
+> ## Links
+> ----------
+> [[~responsive~ Responsive JavaScript and the matchMedia Method]]
+> ## References
+> ------------
+> https://zellwk.com/blog/2023-12-05-css-vars-javascript/
+> https://vueschool.io/articles/vuejs-tutorials/how-to-update-root-css-variable-with-javascript/
+> https://css-tricks.com/how-to-get-all-custom-properties-on-a-page-in-javascript/
+> https://johnkavanagh.co.uk/articles/responsive-javascript-and-the-matchmedia-method/
+> https://kinsta.com/blog/javascript-media-query/
+> 
+> ## Zero-links
+> ----
+> [[00 Responsive]]

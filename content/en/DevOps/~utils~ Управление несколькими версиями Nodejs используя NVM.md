@@ -2,7 +2,7 @@
 create: 2025-09-23
 idnote: sdZQ2eEyix
 vault: dev
-title: Using NVM for Installing and Switching Between Different NodeJS Versions
+title: Using NVM to Install and Switch Between Different Versions of NodeJS
 titleEn: Managing Multiple NodeJS Versions with NVM
 path:
 tags:
@@ -33,12 +33,27 @@ After installation, you need to restart the terminal or run the command:
 - `source ~/.bashrc` if you are using bash
 - `source ~/.zshrc` if you are using zsh
 
-## nvm Commands for Work
+
+## nvm Commands for Operation
 
 ```bash
-nvm install --lts   # the latest LTS version
-nvm install node    # the latest stable version
-nvm use node        # use the latest
+nvm install --lts   # latest LTS version
+nvm install node    # latest stable
+nvm use node        # use latest
 nvm use 18          # use version 18
-nvm ls-remote       # list available versions
+nvm ls-remote 	    # see available versions
 ```
+
+
+
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## References
+> ------------
+> https://github.com/nvm-sh/nvm?tab=readme-ov-file
+> 
+> ## Zero-links
+> ----
+> [[00 UTILS]]

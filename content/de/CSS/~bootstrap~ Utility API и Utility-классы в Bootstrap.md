@@ -18,14 +18,14 @@ Language: de
 ![[Pasted image 20250923150341.png]]
 ## Was ist Utility API und Utility-Klassen in Bootstrap
 
-**Utility API** ist ein auf Sass basierendes Werkzeug zur Erstellung von Utility-Klassen. 
-**Utility-Klassen** sind kleine, zielgerichtete Klassen, die verwendet werden können, um Styles schnell auf HTML-Elemente anzuwenden, ohne benutzerdefiniertes CSS schreiben zu müssen.
+**Utility API** ist ein Sass-basiertes Werkzeug zur Erstellung von Utility-Klassen.  
+**Utility-Klassen** sind kleine, zielgerichtete Klassen, die verwendet werden können, um schnell Stile auf HTML-Elemente anzuwenden, ohne benutzerdefiniertes CSS schreiben zu müssen.
 
-Bootstrap enthält `bootstrap/scss/utilities/api` und `bootstrap/scss/utilities`, die es ermöglichen, eigene Utilities (High-Level-Klassen) für schnelles Prototyping und responsives Design zu erstellen. Prinzipiell ähnelt es **Tailwind**, hat jedoch weniger Klassen und ein einfacheres System.
+Bootstrap hat `bootstrap/scss/utilities/api` und `bootstrap/scss/utilities`, die es ermöglichen, eigene Utilities (Higher-Order-Klassen) für schnelles Prototyping und responsives Design zu erstellen. Es ähnelt dem Prinzip von **Tailwind**, hat aber weniger Klassen und ein einfacheres System.
 
-`$utilities` ist ein array-ähnliches Objekt in SASS, das Einstellungen zur Generierung von Utility-Klassen enthält. Es beinhaltet eine Liste aller Utilities (Klassen), die im finalen CSS-Dateiformat generiert werden und deren Einstellungen. Die Utilities API generiert Klassen basierend auf den Daten aus `$utilities`.
+`$utilities` ist ein Array-ähnliches Objekt in SASS, das die Einstellungen zur Generierung von Utility-Klassen enthält. Es enthält eine Liste aller Utilities (Klassen), die im endgültigen CSS-Dokument generiert werden, sowie deren Einstellungen. Die Utilities API generiert Klassen basierend auf den Daten aus `$utilities`.
 
-In `_utilities.scss` befindet sich das array-ähnliche Objekt `$utilities` mit einer Reihe von Eigenschaften und Daten zur Generierung der Utility-Klassen.
+In `_utilities.scss` befindet sich das array-ähnliche Objekt `$utilities` mit einer Reihe von Eigenschaften und Daten zur Klassen-Generierung.
 
 ```scss
 $utilities: (
@@ -44,37 +44,37 @@ $utilities: (
 );
 ```
 
-Die generierten Utility-Klassen haben eine höhere Priorität als die Basisklassen von Bootstrap. Aus den Namen der Utility-Klassen ist normalerweise klar, was diese Klasse tut. Zum Beispiel zentriert die Klasse `.text-center` den Text, `.m-3` fügt Margen hinzu, `.d-flex` verwandelt ein Element in einen Flex-Container usw.
+Die generierten Utility-Klassen haben eine höhere Priorität als die Basis-Klassen von Bootstrap. Anhand der Namen der Utility-Klassen ist in der Regel klar, was diese Klasse bewirkt. Zum Beispiel: `.text-center` - zentriert den Text, `.m-3` - fügt Abstände hinzu, `.d-flex` - macht das Element zu einem Flex-Container usw.
 
-Der Vorteil der Verwendung von Utility-Klassen liegt darin, dass sie schnelles responsives Design ermöglichen, ohne dass viel benutzerdefiniertes CSS geschrieben werden muss.
+Der Vorteil der Verwendung von Utility-Klassen liegt darin, dass sie es ermöglichen, schnell ein responsives Design zu erstellen, ohne viel benutzerdefiniertes CSS schreiben zu müssen.
 
-**Grundprinzipien solcher Utility-Klassen:**
+**Grundprinzipien dieser Utility-Klassen:**
 1. Atomare, unabhängige Klassen
-2. Sie können miteinander kombiniert werden
-3. Sie haben eine höhere Priorität als die Basisklassen von Bootstrap
+2. Können miteinander kombiniert werden
+3. Haben eine höhere Priorität als die Basis-Klassen von Bootstrap
 
 **Nachteile:**
-Die Dateigröße des finalen CSS wird erhöht, da viele Klassen generiert werden, die im Projekt möglicherweise nicht verwendet werden. Auch die Anpassung und Refaktorierung kann schwieriger sein, da man mit einer großen Anzahl von Klassen arbeiten muss. Wenn zum Beispiel die Textfarbe geändert werden muss, muss man alle Klassen `.text-*` finden und ersetzen, anstatt dies einmal in der CSS-Datei zu ändern. Außerdem kann die Vielzahl von Klassen für jedes Element das HTML-Markup komplizierter machen.
+Die Größe der endgültigen CSS-Datei erhöht sich, da viele Klassen generiert werden, die möglicherweise im Projekt nicht verwendet werden. Zudem kann die Anpassung und Refaktorisierung schwieriger sein, da man mit einer Vielzahl von Klassen arbeiten muss. Zum Beispiel, wenn die Textfarbe geändert werden muss, muss man alle verwendetet Klassen `.text-*`, die im Projekt genutzt werden, finden und ersetzen, anstatt dies einmal in der CSS-Datei zu ändern. Ein weiterer Nachteil ist, dass die Vielzahl der Klassen für jedes Element das HTML-Markup komplizierter machen kann.
 
 ## Eigenschaften für jede Utility
 
 |Option|Typ|Beschreibung|
 |---|---|---|
-|`property`|**Erforderlich**|Name der Eigenschaft, dies kann ein String oder ein Array von Strings sein (z.B. horizontale Padding- oder Margin-Werte).|
-|`values`|**Erforderlich**|Liste von Werten oder ein Map, wenn der Klassenname nicht mit dem Wert übereinstimmen soll. Wenn `null` als Schlüssel des Maps verwendet wird, wird es nicht kompiliert.|
-|`class`|Optional|Variable für den Klassennamen, wenn dieser nicht mit der Eigenschaft übereinstimmen soll. Wenn der Schlüssel `class` nicht angegeben ist und der Schlüssel `property` ein Array von Strings ist, wird der Klassenname das erste Element des Arrays `property` sein.|
-|`state`|Optional|Liste von Pseudoklassen wie `:hover` oder `:focus`, die für die Utility generiert werden sollen. Der Standardwert ist nicht gesetzt.|
-|`responsive`|Optional|Ein boolescher Wert, der angibt, ob responsive Klassen generiert werden sollen. Standardmäßig `false`.|
-|`rfs`|Optional|Ein boolescher Wert zur Aktivierung der fluiden Skalierung. Weitere Informationen finden Sie auf der Seite [RFS](https://getbootstrap.com/docs/5.0/getting-started/rfs/). Standardmäßig `false`.|
-|`print`|Optional|Ein boolescher Wert, der angibt, ob Klassen für den Druck generiert werden sollen. Standardmäßig `false`.|
-|`rtl`|Optional|Ein boolescher Wert, der angibt, ob die Utility im RTL unterstützt werden soll. Standardmäßig `true`.|
+|`property`|**Erforderlich**|Name der Eigenschaft, dies kann ein String oder ein Array von Strings sein (z.B. horizontale Padding oder Margins).|
+|`values`|**Erforderlich**|Liste von Werten oder eine Karte, wenn Sie nicht möchten, dass der Klassenname mit dem Wert übereinstimmt. Wenn der Schlüssel der Karte `null` ist, wird er nicht kompiliert.|
+|`class`|Optional|Variable für den Klassennamen, wenn Sie möchten, dass dieser nicht mit der Eigenschaft übereinstimmt. Wenn der Schlüssel `class` nicht angegeben ist und der Schlüssel `property` ein Array von Strings ist, wird der Klassenname das erste Element des Arrays `property` sein.|
+|`state`|Optional|Liste von Pseudoklassen wie `:hover` oder `:focus`, die für die Utility generiert werden müssen. Der Standardwert ist nicht vorhanden.|
+|`responsive`|Optional|Boolean-Wert, der angibt, ob responsive Klassen generiert werden sollen. Standard ist `false`.|
+|`rfs`|Optional|Boolean-Wert zum Aktivieren des fluid rescaling. Details finden Sie auf der Seite [RFS](https://getbootstrap.com/docs/5.0/getting-started/rfs/). Standard ist `false`.|
+|`print`|Optional|Boolean-Wert, der angibt, ob Klassen für den Druck generiert werden sollen. Standard ist `false`.|
+|`rtl`|Optional|Boolean-Wert, der angibt, ob die Utility im RTL unterstützt werden soll. Standard ist `true`.|
 
 **N.B.**
-Alle Utility-Klassen, die von der API generiert werden, enthalten `!important`, um sicherzustellen, dass sie Komponenten und Modifikator-Klassen nach ihrer Bestimmung überschreiben. Sie können diese Einstellung global über die Variable `$enable-important-utilities` umschalten (Standardwert `true`).
+Alle von der API generierten Utility-Klassen enthalten `!important`, um sicherzustellen, dass sie Komponenten und Modifier-Klassen wie vorgesehen überschreiben. Sie können diese Einstellung global über die Variable `$enable-important-utilities` umschalten (Standard ist `true`).
 
 ## Utilities können erweitert werden.
 
-Hierfür verwenden wir die Sass-Funktion `map-merge()`, die es ermöglicht, zwei Maps zu einer zu kombinieren.
+Dazu verwenden wir die Sass-Funktion `map-merge()`, die es ermöglicht, zwei Maps zu einer zu kombinieren.
 
 ```scss
 $utilities: map-merge(
@@ -92,7 +92,7 @@ $utilities: map-merge(
 );
 ```
 
-Die Reihenfolge ist wichtig, zuerst muss `$utilities` deklariert werden, und danach kann es erweitert werden, gefolgt von der Initialisierung von `utilities/api`.
+Die Reihenfolge ist wichtig, zuerst muss `$utilities` deklariert werden, und dann kann es erweitert werden, anschließend wird `utilities/api` initialisiert.
 
 ```scss
 @import "bootstrap/scss/utilities";  
@@ -116,9 +116,9 @@ $utilities: map-merge(
 ```
 
 ## Bestehende Utilities können modifiziert werden.
-Hier verwenden wir ebenfalls `map-merge()`, aber nun mit einer bestehenden Utility und `map-get()`, um die benötigten Eigenschaften zu erhalten.
+Dazu verwenden wir ebenfalls `map-merge()`, jedoch mit einer bestehenden Utility sowie `map-get()`, um die benötigten Eigenschaften zu erhalten.
 
-Beispielsweise könnte man `10%` zur Utility `width` hinzufügen.
+Zum Beispiel, um `10%` zur Utility `width` hinzuzufügen.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -141,28 +141,28 @@ $utilities: map-merge(
 );
 ```
 
-## Responsiveness zu einer bestehenden Utility-Klasse hinzufügen.
+## Responsive zu einer bestehenden Utility-Klasse hinzufügen.
 
-In **Bootstrap 5** können alle Utilities an Breakpoints „angepasst“ werden.
+In **Bootstrap 5** können alle Utilities an Breakpoints angepasst werden.
 
 ```
 {property}{sides?}-{breakpoint?}-{value}
 ```
 
-**Beispiel:**
- `d-flex, d-sm-flex, d-md-flex, d-lg-flex`
+**Beispiel:**  
+ `d-flex, d-sm-flex, d-md-flex, d-lg-flex'
 
 ```html
 <div class="d-lg-flex">
-  Responsives Höhe-Element
+  Responsive height block
 </div>
 ```
 
-Aber Bootstrap 5 unterstützt nicht alle **Utilities** von Haus aus mit responsive Breakpoints. 
-- Für **margin, padding, display, flex, grid, text, color** - ja, sie unterstützen `-sm-`, `-md-` usw.
-- Für **height/width (`h-*`, `w-*`)** gibt es jedoch **standardmäßig keine** responsive Versionen. Daher funktioniert `h-md-100` nicht.
-- 
-Es besteht jedoch die Möglichkeit, bestehende Utilities wie `height` und `width` mit responsive Unterstützungen zu versehen, indem man die Eigenschaft `responsive: true` in der Beschreibung der Utility in `$utilities` hinzufügt.
+In Bootstrap 5 unterstützen jedoch nicht alle **Utilities** responsive Breakpoints „out of the box“. 
+- Für **margin, padding, display, flex, grid, text, color** — ja, sie funktionieren mit `-sm-`, `-md-` usw.
+- Für **height/width (`h-*`, `w-*`)** gibt es standardmäßig **keine** responsive Version. Daher wird `h-md-100` nicht funktionieren.
+
+Es gibt jedoch die Möglichkeit, die Unterstützung für Responsive zu bestehenden Utilities, wie z. B. `height` und `width`, hinzuzufügen. Indem Sie die Eigenschaft `responsive: true` in der Beschreibung der Utility in `$utilities` hinzufügen.
 
 ```scss
 $utilities: map-merge(  
@@ -183,7 +183,8 @@ $utilities: map-merge(
 );
 ```
 
-Alternativ könnte man auch eine spezifische Utility-Klasse, wie z.B. `border`, gezielt umschreiben.
+Alternativ können Sie auch gezielt eine bestimmte Utility-Klasse, wie z.B. `border`, umschreiben.
+
 ```scss
 $utilities: map-merge(
   $utilities, (
@@ -195,8 +196,8 @@ $utilities: map-merge(
 );
 ```
 
-## Umbenennung von Utility-Klassen
-Dies ist ebenfalls möglich, wenn der Standardname der Klasse nicht gefällt. Dafür verantwortlich ist die Eigenschaft `class`.
+## Utility-Klassen umbenennen
+Das ist auch möglich, wenn Ihnen der Standardklassenname nicht gefällt. Dafür ist die Eigenschaft `class` verantwortlich.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -214,7 +215,7 @@ $utilities: map-merge(
 ```
 
 ## Bestimmte Utility-Klassen aus der CSS-Generierung entfernen
-Um Utilities standardmäßig zu entfernen, setzen Sie den Gruppenschlüssel auf `null`. Zum Beispiel, hier ist ein Beispiel, wie die Utility `width` entfernt wird.
+Entfernen Sie alle Utilities standardmäßig, indem Sie den Schlüssel der Gruppe auf `null` setzen. Zum Beispiel, hier ein Beispiel, wie man die Utility width entfernt.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -228,3 +229,15 @@ $utilities: map-merge(
   )
 );
 ```
+
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## Referenzen
+> ------------
+> https://getbootstrap.com/docs/5.3/utilities/api/
+> 
+> ## Zero-links
+> ----
+> [[00 BOOTSTRAP]]

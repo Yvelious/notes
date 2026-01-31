@@ -2,7 +2,7 @@
 create: 2025-01-16
 idnote: vz2hZnrhGV
 vault: dev
-title: Replacing Symbolic Links with Original Files
+title: Replacing symbolic links with original files
 path:
 tags:
   - bash
@@ -12,7 +12,7 @@ symlinkchapter: BASH
 published: 2024-05-05
 Language: en
 ---
-The goal is to replace symlinks with the actual files. When is this necessary? When you need to get rid of symlinks by replacing them with the original files they point to. This can be necessary when we move our files to another medium or location.
+The goal is to replace symlinks with the actual files. When is this necessary? When you need to get rid of symlinks by replacing them with the original files they point to. This may be needed when moving your files to another storage device or location.
 
 ### The command that does this:
 
@@ -33,32 +33,37 @@ find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
     - Returns the absolute path to the file that the symbolic link `{}` points to.
 4. **`cp --remove-destination $(readlink -f {}) {}`:**
     
-    - Copies the real file that the symlink points to (`$(readlink -f {})`) back to the same position where the symlink resides (`{}`).
-    - The `--remove-destination` option removes the target file before copying. This is important to replace the symlink with the actual file (otherwise, `cp` cannot overwrite the link).
+    - Copies the real file that the symbolic link points to (`$(readlink -f {})`) back to the same location where the symbolic link is located (`{}`).
+    - The `--remove-destination` option removes the target file before copying. This is important to replace the symbolic link with the actual file (otherwise, `cp` would not be able to overwrite the symlink).
 
-### What happens in the end:
+### What happens as a result:
 
 - Symbolic links are replaced with their target files.
-- This is useful if you want to eliminate symbolic links by replacing them with the content of the files they point to.
+- This is useful if you want to get rid of the symbolic links by replacing them with the content of the files they point to.
 
 ### Example:
 
-- Suppose you have the structure:
+- Suppose you have the following structure:
     
     ```plaintext
     ./file.txt
     ./link -> file.txt
     ```
     
-    After running the command:
+    After executing the command:
     
     ```bash
     find . -type l -exec cp --remove-destination $(readlink -f {}) {} \;
     ```
     
-    the structure will change to:
+    the structure changes to:
     
     ```plaintext
     ./file.txt
-    ./link (this is no longer a symlink, but a copy of file.txt)
+    ./link (this is no longer a link, but a copy of file.txt)
     ```
+
+> [!hidden-in-public]
+> 
+> [[00 Bash]]
+> 

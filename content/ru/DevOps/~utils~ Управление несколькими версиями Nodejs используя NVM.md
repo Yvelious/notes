@@ -46,3 +46,14 @@ nvm ls-remote 	    # посмотреть доступные версии
 
 
 
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## References
+> ------------
+> https://github.com/nvm-sh/nvm?tab=readme-ov-file
+> 
+> ## Zero-links
+> ----
+> [[00 UTILS]]

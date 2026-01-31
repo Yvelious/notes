@@ -16,16 +16,16 @@ published: 2025-09-23
 Language: en
 ---
 ![[Pasted image 20250923150341.png]]
-## What is Utility API and Utility Classes in Bootstrap
+## What is the Utility API and Utility Classes in Bootstrap
 
 **Utility API** is a Sass-based tool for creating utility classes. 
-**Utility classes** are small, single-purpose classes that can be used to quickly apply styles to HTML elements without the need for custom CSS.
+**Utility classes** are small, single-purpose classes that can be used to quickly apply styles to HTML elements without the need to write custom CSS.
 
-Bootstrap includes `bootstrap/scss/utilities/api` and `bootstrap/scss/utilities`, which allow you to create your own utilities (higher-order classes) for rapid prototyping and responsive design. The concept is similar to **Tailwind**, but with fewer classes and a simpler system.
+Bootstrap has `bootstrap/scss/utilities/api` and `bootstrap/scss/utilities`, which allows you to create your own utilities (higher-order classes) for rapid prototyping and responsive design. In principle, it is similar to **tailwind**, but with fewer classes and a simpler system.
 
-`$utilities` is an array-like object in SASS that contains configurations for generating utility classes. It holds a list of all utilities (classes) that will be generated in the final CSS file and their settings. The Utilities API generates classes based on the data in `$utilities`.
+`$utilities` is an array-like object in SASS that contains settings for generating utility classes. It includes a list of all utilities (classes) that will be generated in the final CSS file and their settings. The Utilities API generates classes based on the data from `$utilities`.
 
-In `_utilities.scss`, there is an array-like object `$utilities` with a set of properties and data for generating utility classes.
+In `_utilities.scss` there is an array-like object `$utilities` with a set of properties and data for generating utility classes.
 
 ```scss
 $utilities: (
@@ -43,56 +43,56 @@ $utilities: (
 ...
 );
 ```
- 
-The generated utility classes have a higher priority than the basic Bootstrap classes. The names of the utility classes usually indicate what the class does. For example, `.text-center` centers the text, `.m-3` adds margins, `.d-flex` makes an element a flex container, etc. 
 
-The advantage of using utility classes is that they allow for quick creation of responsive designs without the need to write a lot of custom CSS code.
+The generated utility classes have higher priority than the base Bootstrap classes. The names of the utility classes usually indicate what the class does. For example, `.text-center` centers text, `.m-3` adds margins, `.d-flex` makes an element a flex container, and so on.
 
-**The main principles of these utility classes are:**
+The advantage of using utility classes is that they allow for rapid creation of responsive designs without needing to write a lot of custom CSS code.
+
+**Core principles of such utility classes:**
 1. Atomic independent classes
-2. They can be combined with each other
-3. They have a higher priority than basic Bootstrap classes
+2. Can be combined with each other
+3. Have a higher priority than base Bootstrap classes
 
 **Disadvantages:**
-The final CSS file size increases, as many classes are generated which may not be used in the project. Additionally, customization and refactoring can be more complex, as you have to work with a large number of classes. For example, if you need to change the text color, you would have to find and replace all `.text-*` classes used in the project instead of changing it once in the CSS file. Another downside is that the plethora of classes for each element may complicate the HTML markup.
+The size of the final CSS file increases, as many classes might be generated that are not used in the project. Additionally, customization and refactoring can be more complex since you are dealing with a large number of classes. For example, if you need to change the text color, you’ll have to find and replace all `.text-*` classes used in the project, instead of changing it just once in a CSS file. Another downside is that the plethora of classes for each element can complicate the HTML markup.
 
 ## Properties for Each Utility
 
-| Option | Type | Description |
-|---|---|---|
-| `property` | **Mandatory** | The name of the property; this can be a string or an array of strings (e.g., horizontal paddings or margins). |
-| `values` | **Mandatory** | A list of values or a map, if you do not want the class name to match the value. If `null` is used as the key of the map, it will not compile. |
-| `class` | Optional | A variable for the class name if you do not want it to match the property. If the `class` key is not specified and the `property` key is an array of strings, the class name will be the first element of the `property` array. |
-| `state` | Optional | A list of pseudo-class variants, such as `:hover` or `:focus`, that need to be generated for the utility. The default value is absent. |
-| `responsive` | Optional | A boolean value indicating whether to generate responsive classes. The default is `false`. |
-| `rfs` | Optional | A boolean value for enabling fluid rescaling. See more on the [RFS](https://getbootstrap.com/docs/5.0/getting-started/rfs/) page. The default is `false`. |
-| `print` | Optional | A boolean value indicating whether to generate classes for printing. The default is `false`. |
-| `rtl` | Optional | A boolean value indicating whether the utility should support RTL. The default is `true`. |
+| Option  | Type      | Description |
+|---------|-----------|-------------|
+| `property` | **Required** | The name of the property, which can be a string or an array of strings (for example, horizontal paddings or margins). |
+| `values`  | **Required** | A list of values or a map if you don't want the class name to match the value. If `null` is used as a map key, it will not compile. |
+| `class`   | Optional  | A variable for the class name if you don’t want it to match the property. If the `class` key is not specified and the `property` key is an array of strings, the class name will be the first element of the `property` array. |
+| `state`   | Optional  | A list of pseudo-class variations such as `:hover` or `:focus` that need to be generated for the utility. The default value is none. |
+| `responsive` | Optional  | A boolean value indicating whether responsive classes should be generated. Defaults to `false`. |
+| `rfs`     | Optional  | A boolean value for enabling fluid rescaling. For more details, see the [RFS](https://getbootstrap.com/docs/5.0/getting-started/rfs/) page. Defaults to `false`. |
+| `print`   | Optional  | A boolean value indicating whether classes for printing should be generated. Defaults to `false`. |
+| `rtl`     | Optional  | A boolean value indicating whether the utility should support RTL. Defaults to `true`. |
 
-**N.B.**  
-All utility classes generated by the API include `!important` to ensure they override components and modifier classes as intended. You can toggle this setting globally using the variable `$enable-important-utilities` (default is `true`).
+**N.B.**
+All utility classes generated by the API include `!important` to ensure that they override components and modifier classes by design. You can toggle this setting globally using the variable `$enable-important-utilities` (defaults to `true`).
 
-## Utilities can be Extended.
+## Utilities Can Be Extended.
 
-To do this, we use the SASS function `map-merge()`, which allows you to combine two maps into one.
+To do this, we use the Sass function `map-merge()`, which allows you to merge two maps into one.
 
 ```scss
 $utilities: map-merge(
-   $utilities,
-   (
-      "custom-utility": (
-         property: custom-property,
-         class: custom-class,
-         values: (
-            key1: value1,
-            key2: value2,
-         )
-      )
-   )
+	$utilities,
+	(
+		"custom-utility": (
+			property: custom-property,
+			class: custom-class,
+			values: (
+				key1: value1,
+				key2: value2,
+			)
+		)
+	)
 );
 ```
 
-The order matters: you must declare `$utilities` first and then extend it, followed by initializing `utilities/api`.
+Order matters; you must declare `$utilities` first, then extend it and afterwards initialize `utilities/api`.
 
 ```scss
 @import "bootstrap/scss/utilities";  
@@ -100,25 +100,25 @@ $utilities: map-merge(
    $utilities,  
    (  
    "height": (  
-      property: height,  
-      class: h,  
-      responsive: true,  
-      values: (  
-         25: 25%,  
-         50: 50%,  
-         75: 75%,  
-         100: 100%  
-      )  
+     property: height,  
+     class: h,  
+     responsive: true,  
+     values: (  
+       25: 25%,  
+       50: 50%,  
+       75: 75%,  
+       100: 100%  
+     )  
    )  
    )  
 );  
 @import "bootstrap/scss/utilities/api";
 ```
 
-## Existing Utilities can be Modified.
-To do this, we also use `map-merge()`, but with an existing utility, and `map-get()` to retrieve the required properties.
+## Existing Utilities Can Be Modified.
+For this, we also use `map-merge()`, but with an existing utility, and `map-get()` to obtain the desired properties.
 
-For example, to add `10%` to the `width` utility:
+For example, adding `10%` to the `width` utility.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -126,78 +126,78 @@ For example, to add `10%` to the `width` utility:
 @import "bootstrap/scss/utilities";
 
 $utilities: map-merge(
-   $utilities,
-   (
-      "width": map-merge(
-         map-get($utilities, "width"),
-         (
-            values: map-merge(
-               map-get(map-get($utilities, "width"), "values"),
-               (10: 10%),
-            ),
-         ),
+  $utilities,
+  (
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+          (10: 10%),
+        ),
       ),
-   )
+    ),
+  )
 );
 ```
 
-## Adding Responsive to Existing Utility Classes.
+## Adding Responsiveness to Existing Utility Classes.
 
-In **Bootstrap 5**, all utilities can be "built" for breakpoints.
+In **Bootstrap 5**, all utilities can be “customized” for breakpoints.
 
 ```
 {property}{sides?}-{breakpoint?}-{value}
 ```
 
-**For example:**  
+**For Example:**
  `d-flex, d-sm-flex, d-md-flex, d-lg-flex`
 
 ```html
 <div class="d-lg-flex">
-   Responsive height block
+  Responsive height block
 </div>
 ```
 
-However, not all **utilities** in Bootstrap 5 support responsive breakpoints "out of the box." 
-- For **margin, padding, display, flex, grid, text, color** — yes, `-sm-`, `-md-`, etc. work.
-- For **height/width (`h-*`, `w-*`)** responsive versions **are not available by default**. Thus, `h-md-100` will not work.
-
-But there is a possibility to add support for responsive to existing utilities, for example to `height` and `width`, by adding the property `responsive: true` in the utility description in `$utilities`.
+However, Bootstrap 5 does not support responsive breakpoints for all **utilities** "out of the box."
+- For **margin, padding, display, flex, grid, text, color** — yes, `-sm-`, `-md-` etc. work.
+- However, for **height/width (`h-*`, `w-*`)** there are no responsive versions **by default**. Therefore, `h-md-100` will not work.
+- 
+But there is a way to add responsive support to existing utilities, for example to `height` and `width`. You can add the `responsive: true` property in the utility description in `$utilities`.
 
 ```scss
 $utilities: map-merge(  
    $utilities,  
    (  
    "height": (  
-      property: height,  
-      class: h,  
-      responsive: true,  
-      values: (  
-         25: 25%,  
-         50: 50%,  
-         75: 75%,  
-         100: 100%  
-      )  
+     property: height,  
+     class: h,  
+     responsive: true,  
+     values: (  
+       25: 25%,  
+       50: 50%,  
+       75: 75%,  
+       100: 100%  
+     )  
    )  
    )  
 );
 ```
 
-Alternatively, you can rewrite a specific utility class, for example `border`, more precisely.
+Alternatively, you can rewrite a specific utility class, for example `border`.
 
 ```scss
 $utilities: map-merge(
-   $utilities, (
-      "border": map-merge(
-         map-get($utilities, "border"),
-         ( responsive: true ),
-      ),
-   )
+  $utilities, (
+    "border": map-merge(
+      map-get($utilities, "border"),
+      ( responsive: true ),
+    ),
+  )
 )
 ```
 
 ## Renaming Utility Classes
-This is also possible if you do not like the standard class name. This is handled by the `class` property.
+This is also possible if you don't like the standard class name. This is controlled by the `class` property.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -205,17 +205,17 @@ This is also possible if you do not like the standard class name. This is handle
 @import "bootstrap/scss/utilities";
 
 $utilities: map-merge(
-   $utilities, (
-      "margin-start": map-merge(
-         map-get($utilities, "margin-start"),
-         ( class: ml ),
-      ),
-   )
+  $utilities, (
+    "margin-start": map-merge(
+      map-get($utilities, "margin-start"),
+      ( class: ml ),
+    ),
+  )
 );
 ```
 
 ## Removing Specific Utility Classes from CSS Generation
-Remove any default utilities by setting the group key to `null`. For example, below is an example of how to remove the `width` utility.
+You can remove any default utilities by setting the group key to `null`. For example, below is how to remove the width utility.
 
 ```scss
 @import "bootstrap/scss/functions";
@@ -223,9 +223,21 @@ Remove any default utilities by setting the group key to `null`. For example, be
 @import "bootstrap/scss/utilities";
 
 $utilities: map-merge(
-   $utilities,
-   (
-      "width": null
-   )
+  $utilities,
+  (
+    "width": null
+  )
 );
 ```
+
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## References
+> ------------
+> https://getbootstrap.com/docs/5.3/utilities/api/
+> 
+> ## Zero-links
+> ----
+> [[00 BOOTSTRAP]]

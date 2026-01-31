@@ -14,7 +14,6 @@ symlinkchapter: CSS
 Language: ru
 ---
 
-========
 ![[Pasted image 20250923224005.png]]
 ## Что такое `:has()` в CSS?
 
@@ -83,3 +82,14 @@ form:has(input:invalid) {   border: 2px solid red; }
 **N.B.**
 Селекторы с `:has()` могут быть **тяжёлыми для производительности**, особенно если использовать их на больших страницах. Браузеру приходится просматривать **внутренности** каждого элемента, чтобы понять, применять ли к нему стиль.
 
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## References
+> ------------
+> https://developer.mozilla.org/de/docs/Web/CSS/:has
+> 
+> ## Zero-links
+> ----
+> [[00 CSS]]

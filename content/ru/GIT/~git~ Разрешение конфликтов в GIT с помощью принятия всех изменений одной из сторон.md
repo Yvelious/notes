@@ -28,6 +28,10 @@ git add .
 **N.B.**
 Точка (`.`) в конце команды означает, что операция применяется ко всем конфликтующим файлам. Если нужно применить команду к конкретному файлу, указывайте вместо точки путь к этому файлу.
 
+> [!raw-hidden]-
+> If you're already in conflicted state, and you want to just accept _all_ of theirs:
+> If you want to do the opposite:
+
 ## Zero-links
 ------
 [[00 GIT]]

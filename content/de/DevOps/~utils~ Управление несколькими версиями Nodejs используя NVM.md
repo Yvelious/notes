@@ -2,7 +2,7 @@
 create: 2025-09-23
 idnote: sdZQ2eEyix
 vault: dev
-title: Verwenden von NVM zur Installation und zum Wechsel zwischen verschiedenen NodeJS-Versionen
+title: Verwenden von NVM zur Installation und zum Wechseln zwischen verschiedenen NodeJS-Versionen
 titleEn: Managing Multiple NodeJS Versions with NVM
 path:
 tags:
@@ -19,7 +19,7 @@ Language: de
 
 ![[Pasted image 20250923212028.png]]
 
-Dieses Tool ermöglicht es, einfach zwischen verschiedenen Versionen von Node.js zu wechseln. Man kann verschiedene Versionen von Node für unterschiedliche Projekte installieren und nutzen.
+Dieses Tool ermöglicht es, einfach zwischen verschiedenen Versionen von Node.js zu wechseln. Man kann unterschiedliche Versionen von Node für verschiedene Projekte installieren und verwenden.
 
 ## Installation von nvm
 ----
@@ -39,7 +39,21 @@ Nach der Installation muss das Terminal neu gestartet oder der Befehl ausgeführ
 ```bash
 nvm install --lts   # letzte LTS-Version
 nvm install node    # letzte stabile Version
-nvm use node        # letzte Version verwenden
+nvm use node        # die letzte verwenden
 nvm use 18          # Version 18 verwenden
-nvm ls-remote       # verfügbare Versionen anzeigen
+nvm ls-remote 	    # verfügbare Versionen anzeigen
 ```
+
+
+
+> [!hidden-in-public]-
+> ## Links
+> ----------
+> 
+> ## Referenzen
+> ------------
+> https://github.com/nvm-sh/nvm?tab=readme-ov-file
+> 
+> ## Zero-links
+> ----
+> [[00 UTILS]]
