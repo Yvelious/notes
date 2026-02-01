@@ -63,7 +63,7 @@ git add -A
 >    rootfile.txt
 >  ```
 > 
-> If your current working directory is `/my-repo`, and you do `rm rootfile.txt`, then `cd subfolder`, followed by `git add .`, then it will *not* stage the deleted file. But doing `git add -A` will certainly stage this change no matter where you perform the command from..
+> If your current working directory is `/my-repo`, and you do `rm rootfile.txt`, then `cd subfolder`, followed by `git add .`, then it will *not* stage the deleted file. But doing `git add -A` will certainly stage this change no matter where you perform the command from.
 >
 
 

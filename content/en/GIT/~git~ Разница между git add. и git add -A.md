@@ -20,7 +20,7 @@ Language: en
 
 - Adds **only changes in the current directory and below**.
 - **Does not capture files higher in the hierarchy** if you are in a subfolder.
-- **Does not track deleted files** above the level where the command was called.
+- **Does not track deleted files** above the level where the command is invoked.
 
 ```bash
 cd src/utils
@@ -30,8 +30,8 @@ git add .
 
 ## `git add -A`
 
-- Adds **all changes across the entire repository**: new files, modified, deleted.
-- Works **regardless of where you are located** in the directory structure.
+- Adds **all changes across the repository**: new files, modified files, deleted files.
+- Works **regardless of your current directory**.
 
 ```bash
 cd src/utils 
@@ -39,14 +39,15 @@ git add -A
 ```
 **Will add changes across the entire project, including deleted files.**
 
-#### **In summary**
-The commands `git add -A` and `git add .` do the same thing, indexing new, deleted, and modified files, but the difference lies in the scope. The command `git add .` only works within the current directory and nested folders, while the command `git add -A` covers the entire repository.
+#### **To summarize**
+The commands `git add -A` and `git add .` perform the same function, indexing new, deleted, and modified files, but the difference lies in their scope. The `git add .` command works only within the current directory and nested folders, while the `git add -A` command encompasses the entire repository.
 
 > [!raw-hidden]-
 > ### Long-form flags:
 > 
 > -   `git add -A` is equivalent to `git add --all`
 > -   `git add -u` is equivalent to `git add --update`
+> 
 > 
 > Both `git add .` and `git add -A` will stage all new, modified, and deleted files in the newer versions of Git.
 > 
@@ -61,7 +62,7 @@ The commands `git add -A` and `git add .` do the same thing, indexing new, delet
 >    rootfile.txt
 >  ```
 > 
-> If your current working directory is `/my-repo`, and you do `rm rootfile.txt`, then `cd subfolder`, followed by `git add .`, then it will *not* stage the deleted file. But doing `git add -A` will certainly stage this change no matter where you perform the command from..
+> If your current working directory is `/my-repo`, and you do `rm rootfile.txt`, then `cd subfolder`, followed by `git add .`, then it will *not* stage the deleted file. But doing `git add -A` will certainly stage this change no matter where you perform the command from.
 >
 
 > [!hidden-in-public]-

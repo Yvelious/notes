@@ -20,8 +20,8 @@ Language: de
 ## `git add .`
 
 - Fügt **nur Änderungen im aktuellen Verzeichnis und darunter** hinzu.
-- **Erfasst keine Dateien weiter oben in der Hierarchie**, wenn du dich in einem Unterordner befindest.
-- **Überwacht keine entfernten Dateien** über dem Level, wo der Befehl aufgerufen wurde.
+- **Erfasst keine Dateien über der Hierarchie**, wenn du dich in einem Unterordner befindest.
+- **Verfolgt keine entfernten Dateien** oberhalb des Levels, an dem der Befehl ausgeführt wird.
 
 ```bash
 cd src/utils
@@ -41,18 +41,18 @@ git add -A
 **Fügt Änderungen im gesamten Projekt hinzu, einschließlich gelöschter Dateien.**
 
 #### **Zusammenfassung**
-Die Befehle `git add -A` und `git add .` tun im Wesentlichen dasselbe, indem sie neue, gelöschte und geänderte Dateien indizieren, aber der Unterschied liegt im Verantwortungsbereich. Der Befehl `git add .` funktioniert nur im aktuellen Verzeichnis und in den darin enthaltenen Ordnern, während der Befehl `git add -A` das gesamte Repository abdeckt.
+Die Befehle `git add -A` und `git add .` machen dasselbe, sie indizieren neue, gelöschte und geänderte Dateien, aber der Unterschied liegt im Verantwortungsbereich. Der Befehl `git add .` funktioniert nur innerhalb des aktuellen Verzeichnisses und darin enthaltenen Ordnern, während der Befehl `git add -A` das gesamte Repository abdeckt.
 
 > [!raw-hidden]-
-> ### Langform-Flags:
+> ### Long-form flags:
 > 
-> -   `git add -A` ist gleichbedeutend mit `git add --all`
-> -   `git add -u` ist gleichbedeutend mit `git add --update`
-> 
-> Sowohl `git add .` als auch `git add -A` werden alle neuen, geänderten und gelöschten Dateien in neueren Versionen von Git zur Vorbereitung hinzufügen.
-> 
-> Der Unterschied ist, dass `git add -A` Dateien in "höheren, aktuellen und Unterverzeichnissen" indiziert, die zu deinem Arbeits-Git-Repository gehören. Aber `git add .` indiziert nur Dateien im aktuellen Verzeichnis und untergeordneten Verzeichnissen (*nicht* die Dateien außerhalb, d.h. in höheren Verzeichnissen).
-> 
+> -   `git add -A` entspricht `git add --all`
+> -   `git add -u` entspricht `git add --update`
+>
+> Sowohl `git add .` als auch `git add -A` werden in neueren Versionen von Git alle neuen, geänderten und gelöschten Dateien zum Staging hinzufügen.
+>
+> Der Unterschied ist, dass `git add -A` Dateien in "höheren, aktuellen und Unterverzeichnissen" hinzufügt, die zu deinem Arbeits-Git-Repository gehören. Aber ein `git add .` fügt nur Dateien im aktuellen Verzeichnis und den nachfolgenden Unterverzeichnissen hinzu (*nicht* die Dateien, die außerhalb liegen, d.h. übergeordnete Verzeichnisse).
+>
 > Hier ist ein Beispiel:
 > ```
 >  /my-repo
@@ -62,7 +62,7 @@ Die Befehle `git add -A` und `git add .` tun im Wesentlichen dasselbe, indem sie
 >    rootfile.txt
 >  ```
 > 
-> Wenn dein aktuelles Arbeitsverzeichnis `/my-repo` ist und du `rm rootfile.txt` machst, gefolgt von `cd subfolder` und dann `git add .`, wird die gelöschte Datei *nicht* zur Vorbereitung hinzugefügt. Aber `git add -A` wird diese Änderung auf jeden Fall zur Vorbereitung hinzufügen, egal von wo du den Befehl ausführst..
+> Wenn dein aktuelles Arbeitsverzeichnis `/my-repo` ist und du `rm rootfile.txt` machst, dann `cd subfolder`, gefolgt von `git add .`, wird die gelöschte Datei *nicht* zum Staging hinzugefügt. Aber ein `git add -A` wird diese Änderung auf jeden Fall zum Staging hinzufügen, egal wo du den Befehl ausführst.
 >
 
 > [!hidden-in-public]-
