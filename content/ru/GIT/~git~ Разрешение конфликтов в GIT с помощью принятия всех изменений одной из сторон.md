@@ -32,6 +32,7 @@ git add .
 > If you're already in conflicted state, and you want to just accept _all_ of theirs:
 > If you want to do the opposite:
 
-## Zero-links
-------
-[[00 GIT]]
+> [!hidden-in-public]-
+> ## Zero-links
+> ------
+> [[00 GIT]]
