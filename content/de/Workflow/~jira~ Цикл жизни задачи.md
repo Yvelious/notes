@@ -19,48 +19,48 @@ Language: de
 
 ## Lebenszyklus einer Aufgabe
 
-Der Lebenszyklus einer Aufgabe ist die Abfolge von Zuständen, durch die eine Aufgabe geht, beginnend mit der Erstellung und endend mit dem Abschluss.
+Der Lebenszyklus einer Aufgabe ist eine Abfolge von Zuständen, die eine Aufgabe durchläuft, beginnend mit der Erstellung und endend mit dem Abschluss.
 
-Es gibt keinen allgemeinen Standard, der von allen Unternehmen akzeptiert wird. Jedes Unternehmen kann seinen eigenen Lebenszyklus einer Aufgabe definieren, der zu seinen Prozessen und Methoden der Softwareentwicklung passt.
+Es gibt keinen allgemeinen Standard, der von allen Unternehmen anerkannt wird. Jedes Unternehmen kann seinen eigenen Lebenszyklus einer Aufgabe definieren, der zu seinen Prozessen und der Entwicklungsmethodik passt.
 
-Im Folgenden wird ein Beispiel für den Lebenszyklus einer Aufgabe gegeben, den ich in meiner Arbeit verwende. Er ist nicht verbindlich und kann je nach den Bedürfnissen des Projekts geändert werden.
+Im Folgenden ist ein Beispiel für den Lebenszyklus einer Aufgabe aufgeführt, den ich in meiner Arbeit verwende. Er ist nicht verbindlich und kann je nach den Bedürfnissen des Projekts angepasst werden.
 
-**Der Lebenszyklus einer Aufgabe besteht aus folgenden Zuständen:**
-1. **Created** - die Aufgabe wurde erstellt und ist noch keinem zugewiesen. Liegt in der allgemeinen Aufgabenliste (Backlog).
-2. **To Do** - die Aufgabe ist bereit zur Ausführung, und es ist ein Ausführender zugewiesen. Wartet auf ihre Erledigung.
-3. **In Progress** - die Aufgabe wird bearbeitet.
-4. **Ready for Review** - die Aufgabe ist abgeschlossen und bereit zur Überprüfung.
-5. **In Review** - die Aufgabe wird überprüft.
-6. **Ready for Testing** - die Aufgabe wurde überprüft und ist bereit für Tests.
-7. **In Testing** - die Aufgabe befindet sich im Test.
-8. **Ready for Deploy** - die Aufgabe wurde getestet und ist bereit zum Deployment.
-9. **In Deploy** - die Aufgabe ist in Produktion.
-10. **Done** - die Aufgabe ist erledigt.
+**Der Lebenszyklus einer Aufgabe besteht aus den folgenden Zuständen:**
+1. **Created** - Die Aufgabe wurde erstellt und ist noch nicht zugewiesen. Liegt in der allgemeinen Aufgabenliste (Backlog).
+2. **To Do** - Die Aufgabe ist bereit zur Ausführung, ein Ausführender ist zugewiesen. Wartet auf seine Bearbeitung.
+3. **In Progress** - Die Aufgabe wird bearbeitet.
+4. **Ready for Review** - Die Aufgabe ist abgeschlossen und bereit zur Überprüfung.
+5. **In Review** - Die Aufgabe wird überprüft.
+6. **Ready for Testing** - Die Aufgabe wurde überprüft und ist bereit zum Testen.
+7. **In Testing** - Die Aufgabe wird getestet.
+8. **Ready for Deploy** - Die Aufgabe wurde getestet und ist bereit zum Deployment.
+9. **In Deploy** - Die Aufgabe ist im Produktionsumfeld (Prod).
+10. **Done** - Die Aufgabe ist abgeschlossen.
 
-Dies ist die Abfolge von Zuständen, durch die eine Aufgabe geht, beginnend mit der Erstellung und endend mit dem Abschluss.
+Dies ist die Reihenfolge der Zustände, die eine Aufgabe durchläuft, beginnend mit der Erstellung und endend mit dem Abschluss.
 
 Es gibt auch Zustände, die der Aufgabe in jedem Stadium ihres Lebenszyklus unabhängig von ihrem aktuellen Zustand hinzugefügt werden können:
-1. **Blocked** - die Aufgabe ist blockiert und kann aus bestimmten Gründen nicht bearbeitet werden. Gewöhnlich, wenn die Ausführung der Aufgabe von einer anderen abhängt, die noch nicht abgeschlossen ist.
-2. **On Hold** - die Aufgabe ist pausiert. Zum Beispiel, wenn es eine prioritärere Aufgabe gibt, die erledigt werden muss.
-3. **Canceled** - die Aufgabe wurde storniert. Wenn die Aufgabe nicht mehr relevant ist.
+1. **Blocked** - Die Aufgabe ist blockiert und kann aus bestimmten Gründen nicht ausgeführt werden. Normalerweise, wenn die Ausführung einer Aufgabe von einer anderen abhängt, die noch nicht abgeschlossen ist.
+2. **On Hold** - Die Aufgabe ist pausiert. Zum Beispiel, wenn eine prioritärere Aufgabe aufgetaucht ist.
+3. **Canceled** - Die Aufgabe wurde storniert. Wenn die Aufgabe nicht mehr relevant ist.
 
 > [!hidden-in-public]
 > ## Entwurf
 > ---
 > **N.B.**
-> In einigen Unternehmen erfolgt die Testung nicht vor der Überprüfung. In einigen Fällen findet das Testen nach der Überprüfung statt – alles hängt von den Prozessen und der Methodologie der Softwareentwicklung ab.
-> 
-> ✅ Wenn der Reviewer nicht nur den Code auf Einhaltung der Standards und Optimalität überprüft, sondern auch die Funktionalität tiefer analysiert, erfolgt das Testen **nach der Überprüfung**.
-> 
-> ✅ Wenn der Reviewer jedoch hauptsächlich den Code hinsichtlich der Sauberkeit und Effizienz bewertet, **ohne in die Funktionalität einzutauchen**, kann das Testen **vor der Überprüfung** stattfinden.
-> 
-> Somit hängt die Reihenfolge von der Rolle des Reviewers im Prozess und den Anforderungen an die Codequalität ab.
-> 
-> Persönlich bin ich der Meinung, dass der Reviewer den Code auf Einhaltung der Standards und Optimalität überprüfen sollte, während die Funktionalität Aufgabe des Testers ist.
-> 
-> Der Reviewer ist in der Regel ein **Senior-Entwickler**, dessen Zeit teurer ist als die Zeit des Testers. Außerdem hat er eigene Aufgaben und sollte seine Arbeitszeit nicht mit Tests verbringen, anstatt sich um wichtigere Aufgaben zu kümmern.
-> 
-> Daher ist der optimale Prozess: **Reviewer überprüft die Qualität des Codes, und Tester überprüft dessen Funktionalität**.
+> Nicht immer erfolgt das Testen vor der Überprüfung. In einigen Unternehmen geschieht das Testen nach der Überprüfung – alles hängt von den Prozessen und der Entwicklungsmethodik ab.
+>
+> ✅ Wenn der Reviewer den Code nicht nur auf Übereinstimmung mit den Standards und auf Optimierung prüft, sondern auch die Funktionalität eingehender analysiert, dann erfolgt das Testen **nach der Überprüfung**.
+>
+> ✅ Wenn der Reviewer hingegen hauptsächlich den Code hinsichtlich Sauberkeit und Effizienz beurteilt, **ohne sich mit seiner Funktionsfähigkeit zu vertiefen**, dann kann das Testen **vor der Überprüfung** stattfinden.
+>
+> Damit hängt die Reihenfolge von der Rolle des Reviewers im Prozess und den Qualitätsanforderungen an den Code ab.
+>
+> Persönlich halte ich es für notwendig, dass der Reviewer den Code auf Übereinstimmung mit den Standards und auf Optimierung prüft, während die Funktionsfähigkeit Aufgabe des Testers bleibt.
+>
+> Der Reviewer ist in der Regel ein **Senior-Entwickler**, dessen Zeit wertvoller ist als die des Testers. Darüber hinaus hat er eigene Aufgaben und sollte seine Arbeitszeit nicht mit Tests verbringen, sondern sich auf prioritärere Aufgaben konzentrieren.
+>
+> Daher ist der optimale Prozess, dass **der Reviewer die Codequalität prüft und der Tester die Funktionsfähigkeit**.
 
 > [!hidden-in-public]
 > ## Referenzen
@@ -68,7 +68,7 @@ Es gibt auch Zustände, die der Aufgabe in jedem Stadium ihres Lebenszyklus unab
 > 1. https://www.atlassian.com/de/software/jira/guides/workflows/tutorials#create-new-workflow
 > ## Schlüsselwörter
 > ----
-> Workflow-Schema in Jira
+> Workflow-Schema in Jira 1
 > 
 > ## Null
 > ----

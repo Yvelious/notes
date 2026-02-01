@@ -8,7 +8,7 @@ on:
 jobs:
   build-preview:
     if: ${{ github.repository == 'jackyzha0/quartz' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestге
     name: Build Preview
     steps:
       - uses: actions/checkout@v6

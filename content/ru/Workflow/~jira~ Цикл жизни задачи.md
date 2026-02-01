@@ -77,7 +77,7 @@ Language: ru
 > 1. https://www.atlassian.com/ru/software/jira/guides/workflows/tutorials#create-new-workflow
 > ## Keywords
 > ----
-> workflow scheme in a Jira
+> workflow scheme in a Jira 1
 > 
 > ## Zero
 > ----
