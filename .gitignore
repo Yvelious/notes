@@ -14,8 +14,4 @@ replit.nix
 .english_bd.txt
 .general_bd.txt
 _content
-content/.env
-content/package.json
-content/translate.js
-content/node_modules
-content/package-lock.json
+_translate-util
